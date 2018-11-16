@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="密码学,cs,对称密码学,算法," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="对称密码学（Symmetric-key algorithm）[0]{AES加密概述} 一、对称密钥加密（Symmetric-key algorithm）简介对称密钥加密（又称为对称加密、私钥加密、共享密钥加密，是密码学中的一类加密算法。这类算法在加密和解密时使用相同的密钥，或是使用两个可以简单地相互推算的密钥。由于其需要加解密双方掌握同一密钥的特点，与公钥加密相比，它对密钥分配和管理的要求更高。">
+<meta name="keywords" content="密码学,cs,对称密码学,算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对称密码学[0]-AES加密算法">
+<meta property="og:url" content="http://yoursite.com/2018/10/16/对称密码学初涉-0-AES加密算法实现/index.html">
+<meta property="og:site_name" content="Rice Chang">
+<meta property="og:description" content="对称密码学（Symmetric-key algorithm）[0]{AES加密概述} 一、对称密钥加密（Symmetric-key algorithm）简介对称密钥加密（又称为对称加密、私钥加密、共享密钥加密，是密码学中的一类加密算法。这类算法在加密和解密时使用相同的密钥，或是使用两个可以简单地相互推算的密钥。由于其需要加解密双方掌握同一密钥的特点，与公钥加密相比，它对密钥分配和管理的要求更高。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-16T06:40:58.632Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="对称密码学[0]-AES加密算法">
+<meta name="twitter:description" content="对称密码学（Symmetric-key algorithm）[0]{AES加密概述} 一、对称密钥加密（Symmetric-key algorithm）简介对称密钥加密（又称为对称加密、私钥加密、共享密钥加密，是密码学中的一类加密算法。这类算法在加密和解密时使用相同的密钥，或是使用两个可以简单地相互推算的密钥。由于其需要加解密双方掌握同一密钥的特点，与公钥加密相比，它对密钥分配和管理的要求更高。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/16/对称密码学初涉-0-AES加密算法实现/"/>
+
+
+
+
+
+  <title>对称密码学[0]-AES加密算法 | Rice Chang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Rice Chang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Where are you now?</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/16/对称密码学初涉-0-AES加密算法实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rice Chang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rice Chang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">对称密码学[0]-AES加密算法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-16T19:21:06+08:00">
+                2018-10-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="对称密码学（Symmetric-key-algorithm）-0-AES加密概述"><a href="#对称密码学（Symmetric-key-algorithm）-0-AES加密概述" class="headerlink" title="对称密码学（Symmetric-key algorithm）[0]{AES加密概述}"></a>对称密码学（Symmetric-key algorithm）[0]{AES加密概述}</h1><hr>
+<h2 id="一、对称密钥加密（Symmetric-key-algorithm）简介"><a href="#一、对称密钥加密（Symmetric-key-algorithm）简介" class="headerlink" title="一、对称密钥加密（Symmetric-key algorithm）简介"></a>一、对称密钥加密（Symmetric-key algorithm）简介</h2><p><strong>对称密钥加密</strong>（又称为对称加密、私钥加密、共享密钥加密，是密码学中的一类加密算法。这类算法在加密和解密时使用相同的密钥，或是使用两个可以简单地相互推算的密钥。由于其需要加解密双方掌握<strong>同一密钥</strong>的特点，与公钥加密相比，它对密钥分配和管理的要求更高。</p>
+<h2 id="二、高级加密算法（Advanced-Encryption-Standard）简介"><a href="#二、高级加密算法（Advanced-Encryption-Standard）简介" class="headerlink" title="二、高级加密算法（Advanced Encryption Standard）简介"></a>二、高级加密算法（Advanced Encryption Standard）简介</h2><p><strong>高级加密标准</strong>（英语：Advanced Encryption Standard，缩写：AES）在密码学中又称Rijndael加密算法（结合其两位设计者Joan Daemen和Vincent Rijmen命名），是美国联邦政府采用的一种<strong>区块加密</strong>（Block cipher，或称为分组加密）标准。经过五年的甄选流程，高级加密标准由美国国家标准与技术研究院（NIST）于2001年11月26日发布于FIPS PUB 197，并在2002年5月26日成为有效的标准。</p>
+<p>这个标准用来替代原先的DES（Data Encryption Standard，数据加密标准），已经被多方分析且广为全世界所使用。2006年，高级加密标准（AES）已然成为对称密钥加密中最流行的算法之一。最后Rijndael加密法当选是因为其集<strong>安全性</strong>、<strong>性能</strong>、<strong>效率</strong>、<strong>可实现性</strong>和<strong>灵活性</strong>与一体。</p>
+<h3 id="关于DES算法被替代的原因"><a href="#关于DES算法被替代的原因" class="headerlink" title="关于DES算法被替代的原因"></a>关于DES算法被替代的原因</h3><p>Lucifer一般被认为是第一个现代分组密码，由IBM在1970年代基于霍斯特·费斯妥（Horst Feistel）的工作完成。<strong>它的一个修改版本是DES。</strong>在AES出现之前，DES一直是美国政府主要使用的密码之一。当DES作为标准被NSA（美国国家安全局）刚刚推出时，便出现了许多针对S盒的批评。DES中除了S盒的计算，全都是线性的，作为非线性部件，S盒对密码体制的安全性至关重要。由于在最初DES并未公布其实现细节，其S盒设计被怀疑包含陷门，因此学界对其进行了大量的研究，促进了学界发展。S盒的设计者之一，艾伦·康海姆声称：</p>
+<p>“我们将S盒发给了华盛顿，而他们发回来的S盒变得完全不同了。”</p>
+<p>1980年代末，差分分析（differential cryptanalysis）被Biham和Shamir发现，美国国家安全局（NSA）承认未公开的S盒设计准则为了使差分分析不可靠，而差分分析方法早在20年前被与其合作的IBM研究员获得后被保密。目前还并没有明确证据证明DES确实有陷门。密码学中，尽管算法被公开讨论，但也会出现很久之内，只有政府部门把控其中关键信息的情况。这也促进中国政府开发国家密码标准（如SM9算法标准）。</p>
+<p>DES另一个广受诟病之处是其密钥过短，密钥空间规模仅为2^56，这也是被替代的主要原因。1998年，一台耗资250000美元的密钥搜索机在56小时内找到了密钥；1999年，在分布式网络的帮助下，DES密钥子在22小时15分钟被找到。对此，有人（《美国冷战期间的密码学》）声称：</p>
+<p>“NSA与IBM紧密合作以增强算法针对除了暴力破解以外的攻击方式，并增强被称为S盒的置换表的强度。同时，很矛盾的，NSA试图说服IBM将密钥长度从64位削减到48位，而最终他们达成了妥协，使用56位的密钥长度。”</p>
+<h2 id="三、AES描述"><a href="#三、AES描述" class="headerlink" title="三、AES描述"></a>三、AES描述</h2><p>严格地说，AES和Rijndael加密法并不完全一样。AES的区块长度固定为128比特，密钥长度则可以是128，192或256比特；而Rijndael使用的密钥和区块长度均可以是128，192或256比特。</p>
+<p>加密过程中使用的密钥是由Rijndael密钥生成方案产生，进行10，12或14轮加密（对应128、192、256比特的密钥长度）。</p>
+<p>以明文字串128比特、初始密钥长度128比特、10轮加密的AES算法为例（变量名为代码中变量名称）：</p>
+<h3 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h3><p>1.每次加密前，将明文字串初始为state[4][4]，一个4×4（字节）的矩阵；密钥初始化为RoundKey[4][4],同样是一个4×4（字节）的矩阵。</p>
+<p>2.使用轮密钥扩展算法（KeyExpansion），扩展得到一共11个轮密钥。</p>
+<p>3.在长达10轮的轮加密之前，先使用RoundKey与state进行异或（AddAroundKey），称为<strong>白化（whitening）</strong>操作。</p>
+<p><em>白化是为了使一个不知道密钥的攻击者，无法开始一个加密或解密的操作</em></p>
+<p>4.1-9轮加密都需要经过字节代换（SubBytes）、行变换（ShiftRows）、列混淆（MixColumns）、轮密钥与state异或。</p>
+<p>5.第十轮加密需要经过字节代换（SubBytes）、行变换（ShiftRows）、轮密钥与state异或。</p>
+<p>6.输出state即为密文。</p>
+<h3 id="解密"><a href="#解密" class="headerlink" title="解密"></a>解密</h3><p>1.每次解密前，将密文字串初始为state[4][4]，一个4×4（字节）的矩阵；密钥初始化为RoundKey[4][4],同样是一个4×4（字节）的矩阵。</p>
+<p>2.使用轮密钥扩展算法（KeyExpansion），扩展得到一共11个轮密钥。</p>
+<p>3.在长达10轮的轮解密之前，先使用最后一轮（11轮）的RoundKey与state进行异或（AddAroundKey）。</p>
+<p>4.1-9轮解密都需要经过逆向行变换（ShiftRows）、逆向字节代换（InvSubBytes）、轮密钥与state异或、逆向列混淆（InvMixColumns）。使用的是第10-2轮的RoundKey。</p>
+<p>5.第十轮加密需要经过逆向行变换（ShiftRows）、逆向字节代换（InvSubBytes）、轮密钥与state异或。使用第一轮的轮密钥。</p>
+<p>6.输出state即为明文。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/密码学/" rel="tag"># 密码学</a>
+          
+            <a href="/tags/cs/" rel="tag"># cs</a>
+          
+            <a href="/tags/对称密码学/" rel="tag"># 对称密码学</a>
+          
+            <a href="/tags/算法/" rel="tag"># 算法</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/04/散列函数初涉-0/" rel="next" title="散列函数[0]">
+                <i class="fa fa-chevron-left"></i> 散列函数[0]
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Rice Chang</p>
+              <p class="site-description motion-element" itemprop="description">我们穿越长城</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#对称密码学（Symmetric-key-algorithm）-0-AES加密概述"><span class="nav-number">1.</span> <span class="nav-text">对称密码学（Symmetric-key algorithm）[0]{AES加密概述}</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、对称密钥加密（Symmetric-key-algorithm）简介"><span class="nav-number">1.1.</span> <span class="nav-text">一、对称密钥加密（Symmetric-key algorithm）简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、高级加密算法（Advanced-Encryption-Standard）简介"><span class="nav-number">1.2.</span> <span class="nav-text">二、高级加密算法（Advanced Encryption Standard）简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于DES算法被替代的原因"><span class="nav-number">1.2.1.</span> <span class="nav-text">关于DES算法被替代的原因</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、AES描述"><span class="nav-number">1.3.</span> <span class="nav-text">三、AES描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加密"><span class="nav-number">1.3.1.</span> <span class="nav-text">加密</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解密"><span class="nav-number">1.3.2.</span> <span class="nav-text">解密</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rice Chang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
