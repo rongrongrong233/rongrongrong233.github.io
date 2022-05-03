@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="参考资料https://www.wikigain.com/install-macos-catalina-on-virtualbox-on-windows/ （这个非常全，假如当时我第一次看的是这个，就不会走那么多弯路了） https://zhuanlan.zhihu.com/p/47707748 https://www.wikigain.com/install-macos-sierra-10-">
+<meta name="keywords" content="virtualbox,cs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用VirtualBox安装macOS Catalina 10.15.5">
+<meta property="og:url" content="http://yoursite.com/2022/05/03/使用VirtualBox安装macOS-Catalina-10-15-5/index.html">
+<meta property="og:site_name" content="Rice Chang">
+<meta property="og:description" content="参考资料https://www.wikigain.com/install-macos-catalina-on-virtualbox-on-windows/ （这个非常全，假如当时我第一次看的是这个，就不会走那么多弯路了） https://zhuanlan.zhihu.com/p/47707748 https://www.wikigain.com/install-macos-sierra-10-">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/28045466-19d7e93465e12a3b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/28045466-83b0a3594ec2e1e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/28045466-965b7ed2117658d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/28045466-abdeed10aacfe2db.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/28045466-1b7e34c13751cb98.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/28045466-16ec9b0fccf2534b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/28045466-63c5d6f7cba01933.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/28045466-79e695adfce38df7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/28045466-29f669b357e26e62.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/28045466-06b10dedd3e68645.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/28045466-db9663cce182b98a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/28045466-b535dc475f71de79.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/28045466-7be969e1fb1579ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/28045466-9c52f7479eea1465.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/28045466-311f5f289536397e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/28045466-ecbd53e07a4ffe3c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/28045466-81ab07f2ee932bb1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2022-05-03T14:40:56.321Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用VirtualBox安装macOS Catalina 10.15.5">
+<meta name="twitter:description" content="参考资料https://www.wikigain.com/install-macos-catalina-on-virtualbox-on-windows/ （这个非常全，假如当时我第一次看的是这个，就不会走那么多弯路了） https://zhuanlan.zhihu.com/p/47707748 https://www.wikigain.com/install-macos-sierra-10-">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/28045466-19d7e93465e12a3b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2022/05/03/使用VirtualBox安装macOS-Catalina-10-15-5/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>使用VirtualBox安装macOS Catalina 10.15.5 | Rice Chang</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Rice Chang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Where are you now?</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2022/05/03/使用VirtualBox安装macOS-Catalina-10-15-5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rice Chang">
+      <meta itemprop="description" content="我们穿越长城">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rice Chang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用VirtualBox安装macOS Catalina 10.15.5
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2022-05-03 21:34:02 / 修改时间：22:40:56" itemprop="dateCreated datePublished" datetime="2022-05-03T21:34:02+08:00">2022-05-03</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <meta name="referrer" content="no-referrer">
+
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.wikigain.com/install-macos-catalina-on-virtualbox-on-windows/" target="_blank" rel="noopener">https://www.wikigain.com/install-macos-catalina-on-virtualbox-on-windows/</a></p>
+<p>（这个非常全，假如当时我第一次看的是这个，就不会走那么多弯路了）</p>
+<p><a href="https://zhuanlan.zhihu.com/p/47707748" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/47707748</a></p>
+<p><a href="https://www.wikigain.com/install-macos-sierra-10-12-virtualbox/" target="_blank" rel="noopener">https://www.wikigain.com/install-macos-sierra-10-12-virtualbox/</a></p>
+<h2 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h2><h3 id="1-mac系统镜像文件"><a href="#1-mac系统镜像文件" class="headerlink" title="1.mac系统镜像文件"></a>1.mac系统镜像文件</h3><p>我是用的是<code>macOS Catalina 10.15.5 (19F101)</code>的ISO文件。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/28045466-19d7e93465e12a3b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="2-virtual-box及拓展组件"><a href="#2-virtual-box及拓展组件" class="headerlink" title="2.virtual box及拓展组件"></a>2.virtual box及拓展组件</h3><ul>
+<li><p>能打开virtual box就算成功，演示使用版本6.1</p>
+</li>
+<li><p>安装拓展，成功后如下图所示。具体安装方法看参考资料第一个链接。</p>
+</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/28045466-83b0a3594ec2e1e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="3-足够大的硬盘空间"><a href="#3-足够大的硬盘空间" class="headerlink" title="3.足够大的硬盘空间"></a>3.足够大的硬盘空间</h3><h2 id="新建虚拟电脑"><a href="#新建虚拟电脑" class="headerlink" title="新建虚拟电脑"></a>新建虚拟电脑</h2><p>使用virtual box， 新建一个虚拟电脑配置。若使用ISO文件，则需要手动创建虚拟硬盘。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/28045466-965b7ed2117658d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>然后进入虚拟硬盘的配置环节，如图配置好并点击创建，等待创建完成。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/28045466-abdeed10aacfe2db.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>注：此处虚拟硬盘相当于整个macOS能使用的硬盘空间。尽管有些资料显示<strong>动态分配</strong>空间能正常安装，但我试验发现，选<strong>动态分配</strong>某些情况下会出现问题，故我本人选<strong>固定大小</strong>。对于大量使用XCode的用户，100GB可能不大够用，应按照自己的需要进行增加空间大小。</p>
+<h2 id="设置虚拟电脑"><a href="#设置虚拟电脑" class="headerlink" title="设置虚拟电脑"></a>设置虚拟电脑</h2><p>针对此虚拟电脑，选中进行设置，配置完后确定</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/28045466-1b7e34c13751cb98.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>注意：</p>
+<ul>
+<li><p>去掉软驱勾选</p>
+</li>
+<li><p>处理器设置4个或者更多</p>
+</li>
+<li><p>显存拉满</p>
+</li>
+<li><p>没有盘片的位置，选中下载好的mac系统的ISO文件</p>
+</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/28045466-16ec9b0fccf2534b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/28045466-63c5d6f7cba01933.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/28045466-79e695adfce38df7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/28045466-29f669b357e26e62.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h2 id="设置VirtualBox"><a href="#设置VirtualBox" class="headerlink" title="设置VirtualBox"></a>设置VirtualBox</h2><p>进入virtual box的目录运行配置语句</p>
+<p>我使用的方法是，<strong>退出virtual box软件</strong>，进入目录后，直接SHIFT+右键调出power shell窗口运行配置命令。注意使用管理员权限</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/28045466-06b10dedd3e68645.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>具体执行信息如下，一行一行执行。此处的<strong>“MacOS”</strong>就是之前设置的，虚拟电脑配置里面的名称：<br><img src="https://upload-images.jianshu.io/upload_images/28045466-db9663cce182b98a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="名称需要一致"></p>
+<blockquote>
+<p>.\VBoxManage.exe modifyvm “MacOS” –cpuidset 00000001 000106e5 00100800 0098e3fd bfebfbff</p>
+</blockquote>
+<blockquote>
+<p>.\VBoxManage setextradata “MacOS” “VBoxInternal/Devices/efi/0/Config/DmiSystemProduct” “iMac19,1”</p>
+</blockquote>
+<blockquote>
+<p>.\VBoxManage setextradata “MacOS” “VBoxInternal/Devices/efi/0/Config/DmiSystemVersion” “1.0”</p>
+</blockquote>
+<blockquote>
+<p>.\VBoxManage setextradata “MacOS” “VBoxInternal/Devices/efi/0/Config/DmiBoardProduct” “Mac-AA95B1DDAB278B95”</p>
+</blockquote>
+<blockquote>
+<p>.\VBoxManage setextradata “MacOS” “VBoxInternal/Devices/smc/0/Config/DeviceKey” “ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc”</p>
+</blockquote>
+<blockquote>
+<p>.\VBoxManage setextradata “MacOS” “VBoxInternal/Devices/smc/0/Config/GetKeyFromRealSMC” 1</p>
+</blockquote>
+<blockquote>
+<p>.\VBoxManage setextradata “MacOS” VBoxInternal2/EfiGraphicsResolution 1920x1200<br>注意：此处设置了分辨率，如果不适用1920x1200看参考资料第一个链接进行自定义设置。</p>
+</blockquote>
+<h2 id="启动虚拟电脑"><a href="#启动虚拟电脑" class="headerlink" title="启动虚拟电脑"></a>启动虚拟电脑</h2><p>打开virtual box，点击启动按钮</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/28045466-b535dc475f71de79.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>顺带一提，apple公司是完全知道该系统在用虚拟机启动的。目前来看，持不支持也不大力反对</p>
+<h3 id="1-配置系统磁盘"><a href="#1-配置系统磁盘" class="headerlink" title="1.配置系统磁盘"></a>1.配置系统磁盘</h3><p>选中文进行下一步安装，使用磁盘工具下一步</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/28045466-7be969e1fb1579ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>使用之前创建的100G空间，进行抹除</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/28045466-9c52f7479eea1465.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><strong>注意格式选APFS</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/28045466-311f5f289536397e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="2-正式安装系统"><a href="#2-正式安装系统" class="headerlink" title="2.正式安装系统"></a>2.正式安装系统</h3><p>关闭磁盘工具后（左上角红色是关闭按钮），开始安装，一路按提示下一步即可</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/28045466-ecbd53e07a4ffe3c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="3-完成，进入系统"><a href="#3-完成，进入系统" class="headerlink" title="3.完成，进入系统"></a>3.完成，进入系统</h3><p><img src="https://upload-images.jianshu.io/upload_images/28045466-81ab07f2ee932bb1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h2 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h2><p>虚拟机安装一个macOS真的挺麻烦，而尝试安装Xcode写代码也很难受。问题出现在</p>
+<ul>
+<li><p>有些地方图形渲染有问题，怀疑是虚拟机的问题</p>
+</li>
+<li><p>键盘映射偶尔出现问题</p>
+</li>
+<li><p>连接手机调试费劲</p>
+</li>
+</ul>
+<p>原本我只是按自己的喜好想做一个番茄钟的软件，一番安装完了，还是选择找朋友弄了一个iMac。😂</p>
+<p>不过在安装的过程中，了解不少有趣的知识，也不算时间白费了。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/virtualbox/" rel="tag"># virtualbox</a>
+          
+            <a href="/tags/cs/" rel="tag"># cs</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/21/对称密码学-2/" rel="next" title="对称密码学[1]-AES加密算法实现">
+                <i class="fa fa-chevron-left"></i> 对称密码学[1]-AES加密算法实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Rice Chang</p>
+              <p class="site-description motion-element" itemprop="description">我们穿越长城</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.</span> <span class="nav-text">参考资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备阶段"><span class="nav-number">2.</span> <span class="nav-text">准备阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-mac系统镜像文件"><span class="nav-number">2.1.</span> <span class="nav-text">1.mac系统镜像文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-virtual-box及拓展组件"><span class="nav-number">2.2.</span> <span class="nav-text">2.virtual box及拓展组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-足够大的硬盘空间"><span class="nav-number">2.3.</span> <span class="nav-text">3.足够大的硬盘空间</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建虚拟电脑"><span class="nav-number">3.</span> <span class="nav-text">新建虚拟电脑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置虚拟电脑"><span class="nav-number">4.</span> <span class="nav-text">设置虚拟电脑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置VirtualBox"><span class="nav-number">5.</span> <span class="nav-text">设置VirtualBox</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动虚拟电脑"><span class="nav-number">6.</span> <span class="nav-text">启动虚拟电脑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-配置系统磁盘"><span class="nav-number">6.1.</span> <span class="nav-text">1.配置系统磁盘</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-正式安装系统"><span class="nav-number">6.2.</span> <span class="nav-text">2.正式安装系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-完成，进入系统"><span class="nav-number">6.3.</span> <span class="nav-text">3.完成，进入系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写在后面"><span class="nav-number">7.</span> <span class="nav-text">写在后面</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rice Chang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
