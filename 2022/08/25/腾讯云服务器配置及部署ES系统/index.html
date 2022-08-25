@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="0 写在前面本文介绍，在云服务器上安装Elaticsearch8 + Kibana8，并进行外网访问配置的全过程。主要介绍：  购买、连接、部署云服务器 部署、配置Elaticsearch，进行连通测试 部署、配置Elaticsearch，进行连通测试  其中，重点介绍不关闭ES8后自带的xpack.security.enabled: true配置，即使用https访问ES资源的配置方法。 配置">
+<meta name="keywords" content="cs,云服务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="腾讯云服务器配置及部署ES系统">
+<meta property="og:url" content="http://yoursite.name/2022/08/25/腾讯云服务器配置及部署ES系统/index.html">
+<meta property="og:site_name" content="Rice Chang">
+<meta property="og:description" content="0 写在前面本文介绍，在云服务器上安装Elaticsearch8 + Kibana8，并进行外网访问配置的全过程。主要介绍：  购买、连接、部署云服务器 部署、配置Elaticsearch，进行连通测试 部署、配置Elaticsearch，进行连通测试  其中，重点介绍不关闭ES8后自带的xpack.security.enabled: true配置，即使用https访问ES资源的配置方法。 配置">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2022-08-25T09:47:04.241Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="腾讯云服务器配置及部署ES系统">
+<meta name="twitter:description" content="0 写在前面本文介绍，在云服务器上安装Elaticsearch8 + Kibana8，并进行外网访问配置的全过程。主要介绍：  购买、连接、部署云服务器 部署、配置Elaticsearch，进行连通测试 部署、配置Elaticsearch，进行连通测试  其中，重点介绍不关闭ES8后自带的xpack.security.enabled: true配置，即使用https访问ES资源的配置方法。 配置">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.name/2022/08/25/腾讯云服务器配置及部署ES系统/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>腾讯云服务器配置及部署ES系统 | Rice Chang</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Rice Chang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Where are you now?</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.name/2022/08/25/腾讯云服务器配置及部署ES系统/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rice Chang">
+      <meta itemprop="description" content="我们穿越长城">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rice Chang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">腾讯云服务器配置及部署ES系统
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2022-08-25 17:44:53 / 修改时间：17:47:04" itemprop="dateCreated datePublished" datetime="2022-08-25T17:44:53+08:00">2022-08-25</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="0-写在前面"><a href="#0-写在前面" class="headerlink" title="0 写在前面"></a>0 写在前面</h2><p>本文介绍，在云服务器上安装Elaticsearch8 + Kibana8，并进行外网访问配置的全过程。主要介绍：</p>
+<ol>
+<li>购买、连接、部署云服务器</li>
+<li>部署、配置Elaticsearch，进行连通测试</li>
+<li>部署、配置Elaticsearch，进行连通测试</li>
+</ol>
+<p>其中，重点介绍不关闭ES8后自带的<code>xpack.security.enabled: true</code>配置，即使用https访问ES资源的配置方法。</p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><table>
+<thead>
+<tr>
+<th>项</th>
+<th>版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>服务器类型</td>
+<td>腾讯云轻量应用服务器，CPU 2核 - 内存 2GB - 系统盘 40GB</td>
+</tr>
+<tr>
+<td>操作系统版本</td>
+<td>Ubuntu Server 20.04 LTS 64bit</td>
+</tr>
+<tr>
+<td>Elaticsearch</td>
+<td>版本8.2.3, build_type为tar（官网下载的压缩包）</td>
+</tr>
+<tr>
+<td>Kibana</td>
+<td>版本8.2.3, build_type为tar（官网下载的压缩包）</td>
+</tr>
+<tr>
+<td>其他有用工具</td>
+<td>postman(相对于curl指令，我更习惯使用postman) <br> vscode(记录操作步骤、编写请求) <br> putty(远程连接服务器)</td>
+</tr>
+</tbody>
+</table>
+<p>说明：</p>
+<ol>
+<li><em>其他有用工具</em>不影响安装，个人使用习惯而已。</li>
+<li>查阅问题时，请注意各项的版本。例如，由于我使用压缩包部署，所以不需要配置JDK等内容，而也因此。如果需要的话，各项系统变量都需要手动录入。</li>
+</ol>
+<p>主要参考书籍为：<br>赵建亭. 《Elasticsearch权威指南》 清华大学出版社<br>注意此书基于ES7，部分配置内容和ES8有所出入，供参考。</p>
+<h3 id="碎碎念"><a href="#碎碎念" class="headerlink" title="碎碎念"></a>碎碎念</h3><p>不得不说，使用云服务器，不同于我之前在本地安装。当时在本地上，从下载完成，到我使用Kibana的dev tool，用时不超过30分钟。因为ES本身封装的已经很好了，努力在做开箱即用的配置。<br>我原以为云服务器就是操作稍微麻烦，就是没想到有如此多大大小小的坑。<br>期间，还要在充斥着无意义重复转载、内容农场、低能SEO，像垃圾堆一样的中文资料中查找有关信息，真是一个富有挑战性的，又恶心又有趣的体验。<br>希望我这篇文章能让阁下在垃圾堆里面少翻点。感谢网络上各位网友的无私分享，给我很大帮助。</p>
+<h2 id="1-购买"><a href="#1-购买" class="headerlink" title="1 购买"></a>1 购买</h2><p>挑个合适的套餐即可，只要符合自身需求就行。这台服务器主要在云服务器运行ES系统，监控有关数据，向我发送信息，最基础配置已经满足我的需要。<br>系统方面，我选用的系统是ubuntu，主要用起来比较熟。win server 2012 R2我工作时用过，当时没给我留下好的印象，所以不使用。<br>价格方面，最基础也意味着最便宜。最便宜的服务器，新客的基础款轻量应用服务器60-70元一年，别的活动可能更低。</p>
+<h2 id="2-服务器配置、连接"><a href="#2-服务器配置、连接" class="headerlink" title="2 服务器配置、连接"></a>2 服务器配置、连接</h2><h3 id="2-1-配置登录"><a href="#2-1-配置登录" class="headerlink" title="2.1 配置登录"></a>2.1 配置登录</h3><p>我比较习惯使用<strong>putty工具</strong>，只需要重置密码后，使用SSH登录即可。注意你的公网ip和内网ip都显示在控制台中，远程电脑登录时候使用公网ip。</p>
+<h4 id="主要步骤"><a href="#主要步骤" class="headerlink" title="主要步骤"></a>主要步骤</h4><ol>
+<li>使用控制台，服务器关机</li>
+<li>点击远程登录中的重置密码，小本本记好密码，重置完成后开机</li>
+<li>使用重制后的密码使用putty登录</li>
+<li>成功标志为：能使用putty交互命令</li>
+</ol>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ol>
+<li>我一直使用非root用户登录。使用root用户虽然方便一些，但在工作中是十分危险的。</li>
+<li>启动ES不可以使用root用户。</li>
+</ol>
+<h3 id="2-2-配置可视化桌面"><a href="#2-2-配置可视化桌面" class="headerlink" title="2.2 配置可视化桌面"></a>2.2 配置可视化桌面</h3><p>我需要登录服务器，使用浏览器进行某些可视化内容，所以要安装桌面，主要参照腾讯云文档：<br>（不得不说，有个官方文档还是很好的）</p>
+<blockquote>
+<p><a href="https://cloud.tencent.com/document/product/1207/54974" target="_blank" rel="noopener">https://cloud.tencent.com/document/product/1207/54974</a></p>
+</blockquote>
+<h4 id="主要步骤-1"><a href="#主要步骤-1" class="headerlink" title="主要步骤"></a>主要步骤</h4><ol>
+<li>服务器安装gnome桌面及有关依赖的全家桶</li>
+<li>服务器安装tightvncserver，并配置文件</li>
+<li>使用控制台远程登录中的VNC登录</li>
+<li>成功标志为：能看到GNOME桌面</li>
+</ol>
+<h4 id="注意-1"><a href="#注意-1" class="headerlink" title="注意"></a>注意</h4><ol>
+<li>我没有使用下载的VNC Viewer客户端，而是直接使用了腾讯云服务器管理的<strong>控制台</strong>VNC登录。因为我的电脑上，VNC客户端似乎有网络配置的问题，我每次链接的时候都提示超时。使用网页端就正常，可以进去看到GNOME桌面。</li>
+<li>注意使用gnome对内存影响还是比较大的，尤其对于轻量服务器更是大的负担。所以我需要在不用时，关闭GNOME桌面。</li>
+</ol>
+<h4 id="如何关闭桌面服务"><a href="#如何关闭桌面服务" class="headerlink" title="如何关闭桌面服务"></a>如何关闭桌面服务</h4><p>运行以下命令并重启</p>
+<blockquote>
+<p>sudo systemctl set-default multi-user</p>
+</blockquote>
+<p>运行完后，在控制台中重启服务器。</p>
+<h3 id="2-3-配置防火墙"><a href="#2-3-配置防火墙" class="headerlink" title="2.3 配置防火墙"></a>2.3 配置防火墙</h3><p>我没有弄明白腾讯云防火墙与ubuntu防火墙的关系。似乎ubuntu上防火墙默认不开启，只需要在腾讯云控制台开启有关端口即可。<br>由于ES、Kibana的默认端口为<strong>5601和9200</strong>，公网访问，需要手动放行。</p>
+<h4 id="主要步骤-2"><a href="#主要步骤-2" class="headerlink" title="主要步骤"></a>主要步骤</h4><ol>
+<li>进入控制台的防火墙界面</li>
+<li>添加规则</li>
+<li>端口号填写<code>5601,9200</code>，其余选项默认，确定保存规则即可</li>
+</ol>
+<h2 id="3-安装ES并公网访问"><a href="#3-安装ES并公网访问" class="headerlink" title="3 安装ES并公网访问"></a>3 安装ES并公网访问</h2><p><strong>请注意，本文重点介绍不关闭ES8自带的<code>xpack.security.enabled: true</code>配置，即使用https访问ES资源的配置方法。如果关闭自带此配置，有可能会简便很多。</strong><br>如果只需要看配置SSL部分，请直接转<strong>3.2 具体配置</strong>一节   </p>
+<h3 id="3-1-下载安装"><a href="#3-1-下载安装" class="headerlink" title="3.1 下载安装"></a>3.1 下载安装</h3><ol>
+<li>下载解压包<br>访问<a href="https://www.elastic.co/cn/downloads/elasticsearch" target="_blank" rel="noopener">Elasticreach官网</a>下载即可。注意目前(2022年8月20日)，最新版是8.3.3，而我下载的版本是8.2.3，要去以往发行版下载。类型选择<code>LINUX X86_64</code></li>
+</ol>
+<p>我没有使用常用的<code>apt</code>方式安装，因为腾讯云服务器的Ubuntu已经配置腾讯云软件源镜像（访问下载速度很快），但我不会如何下载我想要的版本。</p>
+<p>下载完成后，使用<code>unzip</code>解压缩包就可使用了。</p>
+<ol start="2">
+<li>配置<br>配置以下几个东西，具体方式可以后看<strong>3.2 具体配置</strong>一节：</li>
+</ol>
+<ul>
+<li>公网访问。即修改Elasticsearch.yml文件的networkhost ：0.0.0.0 以增加公网访问</li>
+<li>JVM内存分配。即修改configs/jvm.options参数</li>
+<li>更改一个进程能拥有的最大内存区域限制。即修改/etc/sysctl.conf文件</li>
+<li>Kibana访问。即修改Elasticsearch.yml文件，增加http.cors的跨域访问配置</li>
+<li><strong>重新生成CA和证书</strong></li>
+</ul>
+<p><strong>前三项</strong>配置完，就可以服务器启动服务，服务器和公网访问ES服务了，后两项主要是针对Kibana的配置。</p>
+<h3 id="3-2-具体配置"><a href="#3-2-具体配置" class="headerlink" title="3.2 具体配置"></a>3.2 具体配置</h3><p>绝大多数ES有关的配置，配置都发生在ES解压后的文件夹下。以下提到的bin/和config/，都是Elasticsearch下的文件夹。进行配置时，应停止ES服务。ES服务运行时，不会实时加载配置。（除了安全配置信息）</p>
+<h4 id="3-2-1-公网访问"><a href="#3-2-1-公网访问" class="headerlink" title="3.2.1 公网访问"></a>3.2.1 公网访问</h4><p>切换到config文件夹</p>
+<blockquote>
+<p>cd config/</p>
+</blockquote>
+<p>编辑配置文件elasticsearch.yml</p>
+<blockquote>
+<p>vi elasticsearch.yml</p>
+</blockquote>
+<p>找到默认注释的networkhost，增加配置项并保存</p>
+<blockquote>
+<p>networkhost ：0.0.0.0</p>
+</blockquote>
+<h4 id="3-2-2-JVM内存分配"><a href="#3-2-2-JVM内存分配" class="headerlink" title="3.2.2 JVM内存分配"></a>3.2.2 JVM内存分配</h4><p>（此步骤针对内存较小的服务器。如果服务器内存满足JVM默认配置，没发生3.5节常见问题1，是不必配置的）<br>切换到config文件夹</p>
+<blockquote>
+<p>cd config/</p>
+</blockquote>
+<p>编辑配置文件jvm.options</p>
+<blockquote>
+<p>vi jvm.options</p>
+</blockquote>
+<p>修改以下参数并保存。<br>原来的两个参数：</p>
+<blockquote>
+<p>-Xms4g<br>-Xmx4g</p>
+</blockquote>
+<p>改后的参数</p>
+<blockquote>
+<p>-Xms512M<br>-Xmx512M</p>
+</blockquote>
+<h4 id="3-2-3-内存区域限制"><a href="#3-2-3-内存区域限制" class="headerlink" title="3.2.3 内存区域限制"></a>3.2.3 内存区域限制</h4><p>（这个内存区域限制，是<strong>ubuntu系统</strong>的限制）<br>运行命令</p>
+<blockquote>
+<p>sudo sysctl -w vm.max_map_count=262144</p>
+</blockquote>
+<p>切换到etc/下的文件，查看是否有此修改</p>
+<blockquote>
+<p>sudo vi /etc/sysctl.conf</p>
+</blockquote>
+<p>以下内容有的话不用处理，没有的话增加配置</p>
+<blockquote>
+<p>vm.max_map_count=262144</p>
+</blockquote>
+<h4 id="3-2-4-Kibana访问"><a href="#3-2-4-Kibana访问" class="headerlink" title="3.2.4 Kibana访问"></a>3.2.4 Kibana访问</h4><p>切换到config文件夹</p>
+<blockquote>
+<p>cd config/</p>
+</blockquote>
+<p>编辑配置文件elasticsearch.yml</p>
+<blockquote>
+<p>vi elasticsearch.yml</p>
+</blockquote>
+<p>增加如下配置并保存<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">http.cors.enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="string">http.cors.allow-origin:</span> <span class="string">"*"</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="3-2-5-重新生成CA和证书"><a href="#3-2-5-重新生成CA和证书" class="headerlink" title="3.2.5 重新生成CA和证书"></a>3.2.5 <strong>重新生成CA和证书</strong></h4><p>这个配置对于Kibana很重要，过程比较长，耐心去做。生成的CA、证书对、密钥等都可以反复生成，覆盖之前的配置，多进行尝试就会成功。<br>建议有条件的直接去看官方文档，我会基于官方文档进行我的操作记录：<br><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/security-basic-setup.html" target="_blank" rel="noopener">官方文档：生成CA、P12证书并配置</a><br><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/security-basic-setup-https.html" target="_blank" rel="noopener">官方文档：生成PEM证书并配置</a><br>这位网友写的简略些，但也可以做参考:<br><a href="https://cloud.tencent.com/developer/article/1973195" target="_blank" rel="noopener">云服务器 Centos7 部署 Elasticsearch 8.0 + Kibana 8.0 指南</a></p>
+<p>以下是正式步骤：</p>
+<h5 id="Ⅰ-生成CA"><a href="#Ⅰ-生成CA" class="headerlink" title="Ⅰ 生成CA"></a>Ⅰ 生成CA</h5><p>切换到bin/下，运行：</p>
+<blockquote>
+<p>/elasticsearch-certutil ca</p>
+</blockquote>
+<p>注意：</p>
+<ol>
+<li>输入完命令后进入交互模式，CA是可以自己命名的。建议重命名，和原本的CA区分。</li>
+<li>生成的CA文件在文件夹根目录（bin/的上一级），后面配置时要用到。</li>
+<li>虽然空密码也可以，但是建议使用密码.</li>
+</ol>
+<h5 id="Ⅱ-生成P12文件"><a href="#Ⅱ-生成P12文件" class="headerlink" title="Ⅱ 生成P12文件"></a>Ⅱ 生成P12文件</h5><p>切换到bin/下，运行：</p>
+<blockquote>
+<p>/elasticsearch-certutil cert –ca elastic-stack-ca.p12</p>
+</blockquote>
+<p>注意:</p>
+<ol>
+<li>此步的<code>elastic-stack-ca.p12</code>是默认输出P12文件的名称，可以修改成自己需要输出的文件名称，不加<code>.p12</code>也是没问题的。</li>
+<li>生成的P12文件在ES文件夹config/目录，后面配置elasticsearch.yml要用到。</li>
+<li>虽然空密码也可以，但是建议使用密码.</li>
+</ol>
+<h5 id="Ⅲ-修改ES安全配置"><a href="#Ⅲ-修改ES安全配置" class="headerlink" title="Ⅲ 修改ES安全配置"></a>Ⅲ 修改ES安全配置</h5><p>切换到config文件夹</p>
+<blockquote>
+<p>cd config/</p>
+</blockquote>
+<p>编辑配置文件elasticsearch.yml</p>
+<blockquote>
+<p>vi elasticsearch.yml</p>
+</blockquote>
+<p>注意修改配置文件的以下节：<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">xpack.security.transport.ssl:</span></span><br><span class="line"><span class="attr">    enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    verification_mode:</span> <span class="string">certificate</span></span><br><span class="line">    <span class="string">keystore.path:</span> <span class="string">&#123;P12文件&#125;</span></span><br><span class="line">    <span class="string">truststore.path:</span> <span class="string">&#123;P12文件&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>注意：</p>
+<ol>
+<li>如果你没有像我重新命名生成的p12文件，保持原样即可。因为默认名称生成的P12文件覆盖掉了原来的文件。</li>
+</ol>
+<h5 id="Ⅳ-刷新密钥"><a href="#Ⅳ-刷新密钥" class="headerlink" title="Ⅳ 刷新密钥"></a>Ⅳ 刷新密钥</h5><p>切换到bin/下，运行：</p>
+<blockquote>
+<p>./elasticsearch-keystore add xpack.security.transport.ssl.keystore.secure_password</p>
+</blockquote>
+<blockquote>
+<p>./elasticsearch-keystore add xpack.security.transport.ssl.truststore.secure_password</p>
+</blockquote>
+<p>会提示原来已经有密钥，覆盖即可。</p>
+<h5 id="Ⅴ-生成https证书压缩包"><a href="#Ⅴ-生成https证书压缩包" class="headerlink" title="Ⅴ 生成https证书压缩包"></a>Ⅴ 生成https证书压缩包</h5><p>这一步骤的目标是生成一个包含ES、Kibana各自证书的压缩包<code>elasticsearch-ssl-http.zip</code>。<br><strong>以下步骤是我根据自身情况，在此基础上做了部分修改。如果情况与我不同，要以官方文档为准。</strong><br><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/security-basic-setup-https.html" target="_blank" rel="noopener">官方文档：生成PEM证书并配置</a><br>我的场景：<strong>没有域名、负载均衡</strong>等服务器，ES为单节点的集群。公网访问时，直接以<strong>http + ip</strong>方式访问Kibana服务。Kibana以<strong>https</strong>方式访问ES资源。</p>
+<p>step1. 切换到bin/下，运行：</p>
+<blockquote>
+<p>./elasticsearch-certutil http</p>
+</blockquote>
+<p>然后一步一步来，以下是官网的一个例子，我补充了我配置的内容：</p>
+<ol>
+<li>When asked if you want to generate a CSR, enter n.<br>是否生成CSR，输入<strong>n</strong></li>
+<li>When asked if you want to use an existing CA, enter y.<br>是否使用已有CA，输入<strong>y</strong></li>
+<li>Enter the path to your CA. This is the absolute path to the elastic-stack-ca.p12 file that you generated for your cluster.<br>CA文件的绝对路径。官网的这个提示输入P12文件路径似乎有问题，我输入<strong>第Ⅰ步中CA</strong>的CA文件路径才正常。<blockquote>
+<p>/home/ubuntu/ESStack/elasticsearch-8.2.3/{CA名称}</p>
+</blockquote>
+</li>
+<li>Enter the password for your CA.<br><strong>第Ⅰ步中CA</strong>的密码。</li>
+<li>Enter an expiration value for your certificate. You can enter the validity period in years, months, or days. For example, enter 90D for 90 days.<br>默认生效时间5年，<strong>回车即可</strong></li>
+<li>When asked if you want to generate one certificate per node, enter y.<br>输入y<br>Each certificate will have its own private key, and will be issued for a specific hostname or IP address.<br>When prompted, enter the name of the first node in your cluster. Use the same node name that you used when generating node certificates.<br>输入节点名称，跟生成CA时用的节点应该是一致的。我没有修改节点名称，那么默认节点名称是 <strong>node-1</strong></li>
+<li>Enter all hostnames used to connect to your first node. These hostnames will be added as DNS names in the Subject Alternative Name (SAN) field in your certificate.<br>List every hostname and variant used to connect to your cluster over HTTPS.<br>我没有主机、域名的问题，<strong>直接回车</strong></li>
+<li>Enter the IP addresses that clients can use to connect to your node.<br>注意此步很重要。我输入了服务器的<strong>公网ip + 内网ip</strong>，是可行的</li>
+<li>Repeat these steps for each additional node in your cluster.<br>它会确认以上信息是否输入正确，不正确的话重来一次。还会询问是否再生成额外的证书，拒绝即可。</li>
+</ol>
+<p>以上步骤完成，会自动在文件夹根目录（<code>bin/</code>的上一级）生成压缩包<code>elasticsearch-ssl-http.zip</code>。其包含两个文件夹，里面的结构如下：</p>
+<blockquote>
+<p>/elasticsearch<br>|_ README.txt<br>|_ http.p12<br>|_ sample-elasticsearch.yml</p>
+</blockquote>
+<blockquote>
+<p>/kibana<br>|_ README.txt<br>|_ elasticsearch-ca.pem<br>|_ sample-kibana.yml</p>
+</blockquote>
+<p>step2. 将此压缩包解压缩，把<code>http.p12</code>文件移动到<code>config/certs</code>下，覆盖原文件<br>注：如果你需要改到别的位置，修改elasticsearch.yml的此节：<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">xpack.security.http.ssl:</span></span><br><span class="line"><span class="attr">    enabled:</span> <span class="literal">true</span></span><br><span class="line">    <span class="string">keystore.path:</span> <span class="string">certs/http.p12</span></span><br></pre></td></tr></table></figure></p>
+<p>step3. 切换到<code>bin/</code>，运行以刷新密钥：</p>
+<blockquote>
+<p>./elasticsearch-keystore add xpack.security.http.ssl.keystore.secure_password</p>
+</blockquote>
+<p>注意和<strong>第Ⅳ步的命令</strong>不同</p>
+<h5 id="Ⅵ-配置Kibana的安全配置"><a href="#Ⅵ-配置Kibana的安全配置" class="headerlink" title="Ⅵ 配置Kibana的安全配置"></a>Ⅵ 配置Kibana的安全配置</h5><p>此步骤是针对于<strong>Kibana</strong>来配置的，不需要配置Kibana的话可以跳过。放在3.2下，只是为了操作流畅。<br>以上所有<code>bin/</code>和<code>config/</code>都是<code>elasticsearch-8.2.3</code>文件夹下的。<br>以下所有<code>bin/</code>和<code>config/</code>都是<code>kibana-8.2.3</code>文件夹下的。</p>
+<p>step1. 修改<code>kibana.yml</code>的配置，主要修改或者增加：</p>
+<ol>
+<li><p>elasticsearch.hosts<br>这个默认是http访问，要变成https，并加上公网ip（大括号不用输入）</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">elasticsearch.hosts:</span> <span class="string">["https://&#123;云服务器公网ip&#125;:9200"]</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用户名/密码<br>这个配置有多种选择，似乎token也可以，我选择了用户名/密码的方式。注意用户不可以使用<code>elastic</code>用户，推荐使用<code>kibana_system</code>用户。如果不清楚<code>kibana_system</code>的密码，就去重置。</p>
+</li>
+</ol>
+<p>重置方式：切到ES的bin/下，运行：</p>
+<blockquote>
+<p>./elasticsearch-reset-password -u kibana_system</p>
+</blockquote>
+<p>然后用获取到的用户名/密码进行配置<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">elasticsearch.username:</span> <span class="string">"kibana_system"</span></span><br><span class="line"><span class="string">elasticsearch.password:</span> <span class="string">&#123;重置后的密钥&#125;</span></span><br></pre></td></tr></table></figure></p>
+<ol start="3">
+<li>elasticsearch.ssl.certificateAuthorities<br>这步就是用<strong>第Ⅴ步</strong>得到的Kibana文件夹里面的pem文件进行配置。<blockquote>
+<p>/kibana<br>|_ README.txt<br>|_ elasticsearch-ca.pem<br>|_ sample-kibana.yml</p>
+</blockquote>
+</li>
+</ol>
+<p>配置前，要把elasticsearch-ca.pem放置到合适的路径。我放置在了<code>config/</code>下。<br>我这里有点问题，如果像<code>sample-kibana.yml</code>使用相对路径，会在Kibana启动时无法读取。因此，我使用绝对路径，配置如下：<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">elasticsearch.ssl.certificateAuthorities:</span> <span class="string">["/home/ubuntu/ESStack/kibana-8.2.3/config/elasticsearch-ca.pem"]</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="3-3-连通测试"><a href="#3-3-连通测试" class="headerlink" title="3.3 连通测试"></a>3.3 连通测试</h3><p>cd到bin/下，运行<code>./elasticsearch</code>即可启动ES服务</p>
+<h4 id="连通ES：方式一-curl命令"><a href="#连通ES：方式一-curl命令" class="headerlink" title="连通ES：方式一 curl命令"></a>连通ES：方式一 curl命令</h4><p>使用curl命令（大括号不用输入）</p>
+<blockquote>
+<p>curl -k -i -XGET “https://{云服务器公网ip}:9200” –user {用户名称}:{用户密码}</p>
+</blockquote>
+<p>返回HTTP/200即连通成功。</p>
+<p>（顺带一提，我至今没搞懂win10上powershell怎么使用curl，只能用cmd，也是够神必的。）</p>
+<h4 id="连通ES：方式二-postman"><a href="#连通ES：方式二-postman" class="headerlink" title="连通ES：方式二 postman"></a>连通ES：方式二 postman</h4><ol>
+<li><p>新建HTTP request，使用<strong>GET</strong>，url输入（大括号不用输入）：</p>
+<blockquote>
+<p>https://{云服务器公网ip}:9200</p>
+</blockquote>
+</li>
+<li><p>进入Authorization，选取<strong>Basic Auth</strong>，右侧Username和Password输入用户名称、用户密码</p>
+</li>
+<li>点击Send，Body部分正确返回内容即成功</li>
+</ol>
+<h3 id="3-4-常用操作"><a href="#3-4-常用操作" class="headerlink" title="3.4 常用操作"></a>3.4 常用操作</h3><h4 id="重置ES用户密码"><a href="#重置ES用户密码" class="headerlink" title="重置ES用户密码"></a>重置ES用户密码</h4><p>切到ES的bin/下，运行：</p>
+<blockquote>
+<p>./elasticsearch-reset-password -u elastic</p>
+</blockquote>
+<p>这样重置了<code>elastic</code>这个用户的密码，其他用户同理。</p>
+<h4 id="撤销解压操作"><a href="#撤销解压操作" class="headerlink" title="撤销解压操作"></a>撤销解压操作</h4><p>解压缩可能出现忘记输入解压输出路径的情况。解压ES压缩包和解压http密钥对都有可能出问题。只需要运行以下命令：</p>
+<blockquote>
+<p>zipinfo -1 ./{zip文件名称}| xargs rm -rf</p>
+</blockquote>
+<h4 id="关闭ES进程"><a href="#关闭ES进程" class="headerlink" title="关闭ES进程"></a>关闭ES进程</h4><p>出于各种原因，可能存在putty断开连接但是ES进程仍旧继续的情况。若需要手动结束的话，需要：<br>找到pid</p>
+<blockquote>
+<p>ps -ef | grep elastic</p>
+</blockquote>
+<p>结束进程（大括号不用输入）</p>
+<blockquote>
+<p>kill -9 {pid}</p>
+</blockquote>
+<h3 id="3-5-常见问题"><a href="#3-5-常见问题" class="headerlink" title="3.5 常见问题"></a>3.5 常见问题</h3><ol>
+<li>问题：进程会自动killed，且不打印日志<br>原因：原因是内存太低，JVM受不鸟了。3.2.2节已有配置方案。需要去<code>configs/jvm.options</code>里面修改以下两个参数：<blockquote>
+<p>-Xms4g<br>-Xmx4g</p>
+</blockquote>
+</li>
+</ol>
+<p>我改成了</p>
+<blockquote>
+<p>-Xms512M<br>-Xmx512M</p>
+</blockquote>
+<ol start="2">
+<li>问题：ES无法启动，日志提示内存问题，具体如下：<blockquote>
+<p><em>max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]</em></p>
+</blockquote>
+</li>
+</ol>
+<p>原因是系统默认的进程内存区限制不满足ES要求，要手动更改，3.2.3节已有配置方案。<br>要在服务器执行：</p>
+<blockquote>
+<p>sudo sysctl -w vm.max_map_count=262144</p>
+</blockquote>
+<p>执行后，并修改/etc/sysctl.conf文件，末尾添加或者修改</p>
+<blockquote>
+<p>vm.max_map_count=262144</p>
+</blockquote>
+<p>注意，执行完sudo命令之后，一般已经有此配置了，不必重复配置。</p>
+<h2 id="4-安装Kibana并公网访问"><a href="#4-安装Kibana并公网访问" class="headerlink" title="4 安装Kibana并公网访问"></a>4 安装Kibana并公网访问</h2><h3 id="4-1-下载安装"><a href="#4-1-下载安装" class="headerlink" title="4.1 下载安装"></a>4.1 下载安装</h3><ol>
+<li>下载解压包<br>访问<a href="https://www.elastic.co/cn/downloads/past-releases/kibana-8-2-3" target="_blank" rel="noopener">Elasticreach官网</a>下载即可。注意目前(2022年8月20日)，最新版是8.3.3，而我下载的版本是8.2.3，要去以往发行版下载。类型选择<code>LINUX X86_64</code></li>
+</ol>
+<p>我没有使用常用的<code>apt</code>方式安装，因为腾讯云服务器的Ubuntu已经配置腾讯云软件源镜像（访问下载速度很快），但我不会如何下载我想要的版本。</p>
+<p>下载完成后，使用<code>unzip</code>解压缩包就可使用了。</p>
+<ol start="2">
+<li>配置<br>配置以下几个东西，具体方式可以后看<strong>4.2 具体配置</strong>一节：</li>
+</ol>
+<ul>
+<li>Kibana的公网访问。即修改Kibana.yml文件，增加server.host: “0.0.0.0”</li>
+<li><strong>重新生成CA和证书</strong></li>
+</ul>
+<h3 id="4-2-具体配置"><a href="#4-2-具体配置" class="headerlink" title="4.2 具体配置"></a>4.2 具体配置</h3><h4 id="4-2-1-公网访问"><a href="#4-2-1-公网访问" class="headerlink" title="4.2.1 公网访问"></a>4.2.1 公网访问</h4><p>切换到config文件夹</p>
+<blockquote>
+<p>cd config/</p>
+</blockquote>
+<p>编辑配置文件<code>kibana.yml</code></p>
+<blockquote>
+<p>vi kibana.yml</p>
+</blockquote>
+<p>找到默认注释的server.host，增加配置项并保存</p>
+<blockquote>
+<p>server.host: “0.0.0.0”</p>
+</blockquote>
+<h4 id="4-2-2-重新生成CA和证书"><a href="#4-2-2-重新生成CA和证书" class="headerlink" title="4.2.2 重新生成CA和证书"></a>4.2.2 <strong>重新生成CA和证书</strong></h4><p>和<code>3.2.5配置</code>没有任何区别。涉及Kibana部分，就是<code>3.2.5配置</code>的<strong>Ⅵ 配置Kibana的安全配置</strong>部分</p>
+<h3 id="4-3-连通测试"><a href="#4-3-连通测试" class="headerlink" title="4.3 连通测试"></a>4.3 连通测试</h3><p>cd到bin/下，运行<code>./kibana</code>即可启动Kibana服务</p>
+<h4 id="连通Kibana：浏览器"><a href="#连通Kibana：浏览器" class="headerlink" title="连通Kibana：浏览器"></a>连通Kibana：浏览器</h4><p>在本地浏览器访问以下URL（大括号不用输入）</p>
+<blockquote>
+<p>http://{云服务器公网ip}:5601/login?next=%2F</p>
+</blockquote>
+<p>能看到登录界面，能登录到Kibana连通成功。登陆时可以使用<code>elastic</code>用户</p>
+<h3 id="4-4-常见问题"><a href="#4-4-常见问题" class="headerlink" title="4.4 常见问题"></a>4.4 常见问题</h3><ol>
+<li>kibana无法启动，运行时提示</li>
+</ol>
+<blockquote>
+<p>[error]Unable to retrieve version information……<strong>self signed certificates</strong></p>
+</blockquote>
+<p>需要配置kibana.yml和elasticsearch.yml的SSL，可以看<code>3.2.5配置</code></p>
+<ol start="2">
+<li>重新生成Kibana令牌</li>
+</ol>
+<p>在第一次启动ES时，ES会显示elastic用户的密码和有效期为30分钟的，Kibana的令牌。令牌的作用是：<br><strong>如果你没有像我这样配置，而是选择直接以默认配置方式启动ES、Kibana的话，启动完Kibana会提示你用浏览器访问指定地址，输入令牌，完成ES和Kibana的绑定。</strong><br>如果某些原因导致令牌失效，以下方式重新生成令牌：<br>切换到ES文件夹的<code>bin/</code>下</p>
+<blockquote>
+<p>cd /bin</p>
+</blockquote>
+<p>运行命令</p>
+<blockquote>
+<p>./elasticsearch-create-enrollment-token -s kibana</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/cs/" rel="tag"># cs</a>
+          
+            <a href="/tags/云服务/" rel="tag"># 云服务</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/05/03/使用VirtualBox安装macOS-Catalina-10-15-5/" rel="next" title="使用VirtualBox安装macOS Catalina 10.15.5">
+                <i class="fa fa-chevron-left"></i> 使用VirtualBox安装macOS Catalina 10.15.5
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Rice Chang</p>
+              <p class="site-description motion-element" itemprop="description">我们穿越长城</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-写在前面"><span class="nav-number">1.</span> <span class="nav-text">0 写在前面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置"><span class="nav-number">1.1.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#碎碎念"><span class="nav-number">1.2.</span> <span class="nav-text">碎碎念</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-购买"><span class="nav-number">2.</span> <span class="nav-text">1 购买</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-服务器配置、连接"><span class="nav-number">3.</span> <span class="nav-text">2 服务器配置、连接</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-配置登录"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 配置登录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#主要步骤"><span class="nav-number">3.1.1.</span> <span class="nav-text">主要步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注意"><span class="nav-number">3.1.2.</span> <span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-配置可视化桌面"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 配置可视化桌面</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#主要步骤-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">主要步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注意-1"><span class="nav-number">3.2.2.</span> <span class="nav-text">注意</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何关闭桌面服务"><span class="nav-number">3.2.3.</span> <span class="nav-text">如何关闭桌面服务</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-配置防火墙"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 配置防火墙</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#主要步骤-2"><span class="nav-number">3.3.1.</span> <span class="nav-text">主要步骤</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-安装ES并公网访问"><span class="nav-number">4.</span> <span class="nav-text">3 安装ES并公网访问</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-下载安装"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 下载安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-具体配置"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 具体配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-公网访问"><span class="nav-number">4.2.1.</span> <span class="nav-text">3.2.1 公网访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-JVM内存分配"><span class="nav-number">4.2.2.</span> <span class="nav-text">3.2.2 JVM内存分配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-3-内存区域限制"><span class="nav-number">4.2.3.</span> <span class="nav-text">3.2.3 内存区域限制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-4-Kibana访问"><span class="nav-number">4.2.4.</span> <span class="nav-text">3.2.4 Kibana访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-5-重新生成CA和证书"><span class="nav-number">4.2.5.</span> <span class="nav-text">3.2.5 重新生成CA和证书</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Ⅰ-生成CA"><span class="nav-number">4.2.5.1.</span> <span class="nav-text">Ⅰ 生成CA</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Ⅱ-生成P12文件"><span class="nav-number">4.2.5.2.</span> <span class="nav-text">Ⅱ 生成P12文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Ⅲ-修改ES安全配置"><span class="nav-number">4.2.5.3.</span> <span class="nav-text">Ⅲ 修改ES安全配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Ⅳ-刷新密钥"><span class="nav-number">4.2.5.4.</span> <span class="nav-text">Ⅳ 刷新密钥</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Ⅴ-生成https证书压缩包"><span class="nav-number">4.2.5.5.</span> <span class="nav-text">Ⅴ 生成https证书压缩包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Ⅵ-配置Kibana的安全配置"><span class="nav-number">4.2.5.6.</span> <span class="nav-text">Ⅵ 配置Kibana的安全配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-连通测试"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 连通测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#连通ES：方式一-curl命令"><span class="nav-number">4.3.1.</span> <span class="nav-text">连通ES：方式一 curl命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#连通ES：方式二-postman"><span class="nav-number">4.3.2.</span> <span class="nav-text">连通ES：方式二 postman</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-常用操作"><span class="nav-number">4.4.</span> <span class="nav-text">3.4 常用操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#重置ES用户密码"><span class="nav-number">4.4.1.</span> <span class="nav-text">重置ES用户密码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#撤销解压操作"><span class="nav-number">4.4.2.</span> <span class="nav-text">撤销解压操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关闭ES进程"><span class="nav-number">4.4.3.</span> <span class="nav-text">关闭ES进程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-常见问题"><span class="nav-number">4.5.</span> <span class="nav-text">3.5 常见问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-安装Kibana并公网访问"><span class="nav-number">5.</span> <span class="nav-text">4 安装Kibana并公网访问</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-下载安装"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 下载安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-具体配置"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 具体配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-1-公网访问"><span class="nav-number">5.2.1.</span> <span class="nav-text">4.2.1 公网访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-2-重新生成CA和证书"><span class="nav-number">5.2.2.</span> <span class="nav-text">4.2.2 重新生成CA和证书</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-连通测试"><span class="nav-number">5.3.</span> <span class="nav-text">4.3 连通测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#连通Kibana：浏览器"><span class="nav-number">5.3.1.</span> <span class="nav-text">连通Kibana：浏览器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-常见问题"><span class="nav-number">5.4.</span> <span class="nav-text">4.4 常见问题</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rice Chang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
