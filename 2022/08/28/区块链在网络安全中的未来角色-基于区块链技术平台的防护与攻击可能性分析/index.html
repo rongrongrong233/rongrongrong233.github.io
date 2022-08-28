@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文翻译自IEEE会议文章Blockchain’s Future Role in Cybersecurity. Analysis of Defensive and Offensive Potential Leveraging Blockchain-Based Platforms，参考文献请参考原文的引注翻译时间2020年4月 区块链在网络安全中的未来角色——基于区块链技术平台的防护与攻击可能性分析">
+<meta name="keywords" content="cs,密码学,区块链,翻译文章,网络安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="区块链在网络安全中的未来角色-基于区块链技术平台的防护与攻击可能性分析">
+<meta property="og:url" content="http://yoursite.name/2022/08/28/区块链在网络安全中的未来角色-基于区块链技术平台的防护与攻击可能性分析/index.html">
+<meta property="og:site_name" content="Rice Chang">
+<meta property="og:description" content="本文翻译自IEEE会议文章Blockchain’s Future Role in Cybersecurity. Analysis of Defensive and Offensive Potential Leveraging Blockchain-Based Platforms，参考文献请参考原文的引注翻译时间2020年4月 区块链在网络安全中的未来角色——基于区块链技术平台的防护与攻击可能性分析">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.name/2022/08/28/区块链在网络安全中的未来角色-基于区块链技术平台的防护与攻击可能性分析/picassets/1.png">
+<meta property="og:updated_time" content="2022-08-28T01:49:02.327Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="区块链在网络安全中的未来角色-基于区块链技术平台的防护与攻击可能性分析">
+<meta name="twitter:description" content="本文翻译自IEEE会议文章Blockchain’s Future Role in Cybersecurity. Analysis of Defensive and Offensive Potential Leveraging Blockchain-Based Platforms，参考文献请参考原文的引注翻译时间2020年4月 区块链在网络安全中的未来角色——基于区块链技术平台的防护与攻击可能性分析">
+<meta name="twitter:image" content="http://yoursite.name/2022/08/28/区块链在网络安全中的未来角色-基于区块链技术平台的防护与攻击可能性分析/picassets/1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.name/2022/08/28/区块链在网络安全中的未来角色-基于区块链技术平台的防护与攻击可能性分析/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>区块链在网络安全中的未来角色-基于区块链技术平台的防护与攻击可能性分析 | Rice Chang</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Rice Chang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Where are you now?</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.name/2022/08/28/区块链在网络安全中的未来角色-基于区块链技术平台的防护与攻击可能性分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rice Chang">
+      <meta itemprop="description" content="我们穿越长城">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rice Chang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">区块链在网络安全中的未来角色-基于区块链技术平台的防护与攻击可能性分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2022-08-28 08:58:44 / 修改时间：09:49:02" itemprop="dateCreated datePublished" datetime="2022-08-28T08:58:44+08:00">2022-08-28</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>本文翻译自IEEE会议文章<em>Blockchain’s Future Role in Cybersecurity. Analysis of Defensive and Offensive Potential Leveraging Blockchain-Based Platforms</em>，参考文献请参考原文的引注</strong><br><strong>翻译时间2020年4月</strong></p>
+<h1 id="区块链在网络安全中的未来角色——基于区块链技术平台的防护与攻击可能性分析"><a href="#区块链在网络安全中的未来角色——基于区块链技术平台的防护与攻击可能性分析" class="headerlink" title="区块链在网络安全中的未来角色——基于区块链技术平台的防护与攻击可能性分析"></a>区块链在网络安全中的未来角色——基于区块链技术平台的防护与攻击可能性分析</h1><h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>区块链与网络安全是信息技术领域近年来发展迅猛和得到大量关注的两大主题。本文中作者意图从攻击者和防御者角度列举与构造已存在的和潜在的基于区块链网络安全解决方法的使用，以找出其中起决定作用的关键因素。历史上，区块链被用于创新金融服务（如加密货币），但如今在电子政务，供应链管理与安全领域也发展出应用案例（如加密，身份认证和授权，数据安全）。另一方面，基于区块链的平台正日益成为恶意攻击者的目标并成为了原始攻击载体。因此，从安全角度，基于区块链技术的方法是否应被鼓励，采用技术带来改变的效果是否有益是值得研究的。</p>
+<h2 id="关键词"><a href="#关键词" class="headerlink" title="关键词"></a>关键词</h2><p>区块链，网络安全，密码学，基于区块链的平台</p>
+<h2 id="一-引言"><a href="#一-引言" class="headerlink" title="一 引言"></a>一 引言</h2><p>作为第一款广为人知的加密货币——比特币的基石[1]，区块链技术于2008年问世。而从2010年中期开始，区块链技术的使用者们意识到区块链作为基础技术，有着较比特币自身更广阔的应用。这两类用途随着区块链开始被其他应用采用而走上不同发展道路[2]，而其他类加密货币如以太坊开始崭露头角。<br>最简单的说，区块链（也称作“数字分布式账本”）是不断将新信息（区块）添加到数据集末尾形成链的分布式数据库[3]。数据被储存在不同的物理位置上（区别于中心化存储），因此对公共公开定义、认证；由于同一份信息储存在许多位置上，更难被篡改。<br>基于区块链技术的产品如加密货币还成为了数字“银行劫案”的主要目标，在比特币从30美分一枚对数增长为近14000美元的炒作巅峰时，加密货币处于强大的攻击笼罩下[4]。不断增长的价值招致不同种类的攻击，例如2011年日本交易平台Mt. Gox 遭受攻击，损失875万美元；之后2013年发生的比特币劫案涉及约4.5亿美元[5]。此外，由于加密货币的特殊隐私性，从2013年到2017年中期，勒索攻击激增，仅最大的35个勒索病毒家族就通过加密货币收取1200万美元的赎金[6]。<br>但是，就如之前所说，区块链技术不局限于加密货币而是不断进化，在其他数字领域的新场景下带来了便利。本文章意图填补区块链与安全之间的交界空白。我们通过回顾和构建区块链技术带来的间接和直接影响，来更好的从安全角度了解采用区块链的后果。这篇文章的另一贡献是构建与总览了最先进的网络防御中，间接采用的区块链技术手段，而这是在正式文献中缺少的。</p>
+<h2 id="二-框架划分"><a href="#二-框架划分" class="headerlink" title="二 框架划分"></a>二 框架划分</h2><p>为了更好地比较区块链攻防领域的各种可能解决方法，我们在表1介绍了基础框架。</p>
+<p><img src="./picassets/1.png" alt></p>
+<p>表1 用以比较区块链技术在不同领域给网络安全带来影响的框架<br>第一个维度区分攻击与防御功能的差别。第二个维度的差异体现在某一解决方法是直接影响、作用于区块链平台还是利用区块链作为“达到目标的手段”。我们将所有方法和技术以它们的维度划分四个象限内。表1 提供每个象限的一句话简明概述，在后来的章节将进行进一步的解释。</p>
+<h3 id="A-功能维度"><a href="#A-功能维度" class="headerlink" title="A 功能维度"></a>A 功能维度</h3><p>很明显，可以从截然不同的功能角度看待区块链。第一个角度就是成为敌手或者一名攻击者，常见的有利用、破坏、篡改或直接暴力入侵区块链。我们认为这些方面是区块链的攻击功能。<br>第二个角度就是从用户、平台所有者或者安全从业人员的防御者角度看待。这些合法角色可以部署各种技术和解决方案来保护他们的区块链产品与信息资产。因此，我们把这些方面视为区块链的防御功能。</p>
+<h3 id="B-影响维度"><a href="#B-影响维度" class="headerlink" title="B 影响维度"></a>B 影响维度</h3><p>另一方面，影响角度会稍微复杂一些。首先，直接影响指的是直接作用于区块链平台的解决方案池。换句话讲，一个试图从加密货币交易所抢劫资金的行为或者一个直接提升基于智能合约区块链安全性的行为，都可以被视为直接影响。而当一个敌手使用区块链技术间接达成其他目标时影响了其他平台或系统，我们视为间接影响。</p>
+<h2 id="三-基于区块链的攻击"><a href="#三-基于区块链的攻击" class="headerlink" title="三 基于区块链的攻击"></a>三 基于区块链的攻击</h2><p>对攻击方的详细分析可以总结出超过30种攻击，而漏洞类型分为5个主要威胁组，可直接针对区块链平台。但如今几乎没有已发表的方法论或案例研究描述通过影响区块链来作用于其他系统或者应用。但是，恶意攻击者可使用拒绝服务攻击（DOS）或者寻找常见漏洞来提权。</p>
+<h3 id="A-针对区块链实施的直接攻击方式"><a href="#A-针对区块链实施的直接攻击方式" class="headerlink" title="A 针对区块链实施的直接攻击方式"></a>A 针对区块链实施的直接攻击方式</h3><p>现今存在针对区块链的不同种类威胁，而正如同其他技术一样，这些威胁有着不同的达成方式。经过粗略评估[7]，针对区块链的潜在攻击域可被总结如下：</p>
+<ul>
+<li>双花威胁：攻击者试图使用同一份加密货币进行多次交易，例如快速连续交易，逆转交易或者向区块发送复杂的具有冲突的交易信息。主要有五种对交易认证机制的攻击方法。</li>
+<li>矿池威胁：由于单独挖矿成功的高难度，矿工们选择加入矿池来聚集算力，共同从成功的挖矿中分享收益。在这些场景下的攻击者试图攫取超出他们贡献应得的利益。主要有五种已知的针对共识机制的攻击方式。</li>
+<li>钱包威胁：钱包是为了储存加密货币和生成身份鉴别的交易私钥。一个钱包管理所有私钥和交易内容。主要有五种针对身份认证机制的攻击和漏洞，许多案例中都利用了椭圆曲线签名算法中的缺陷。</li>
+<li>网络威胁：一个分布式的网络中，有很多可以影响挖矿节点和交易用户的方法。已知至少有十种攻击方式，利用了区块链协议的缺陷，网络路由或点对点网络的不足。</li>
+<li>智能合约威胁：智能合约是当交易产生时履行交易的脚本。目前为止，其主要与另一种叫以太币的加密货币有关（以太坊平台的一部分）。有五种通过利用设计缺陷和脆弱性的攻击方式。<br>大多数攻击的策略都是基于区块链的分布式特质的。但是，就从矿池、消费者的钱包或智能合约而言，以上所有手段都是同样危险的。</li>
+</ul>
+<h3 id="B-使用区块链来攻击和影响其他平台"><a href="#B-使用区块链来攻击和影响其他平台" class="headerlink" title="B 使用区块链来攻击和影响其他平台"></a>B 使用区块链来攻击和影响其他平台</h3><p>另一方面，也有传统攻击载体被运用到区块链领域中，造成比单纯区块链平台更深远的影响。他们包括：</p>
+<ul>
+<li>分布式拒绝服务攻击（DDOS）：尽管由于其自身特性和预防机制，对一个区块链进行分布式拒绝攻击是更难的，但如果链上拥有其他运行的服务，展开一个能影响整个系统的复杂分布式拒绝攻击是有可能的。</li>
+<li>错误和漏洞：从服务器或者客户端寻找和利用区块链服务或者软件的脆弱性比从区块链自身寻找更容易。这样的尝试可以为攻击者提权，为后续横向行动铺垫。<br>因此，似乎基于区块链的方法作为更复杂攻击的启动器是有困难的，并且不被受害者意识到和记录。这不意味着这样的攻击不可能，而是还没广泛使用。</li>
+</ul>
+<h2 id="四-基于区块链的防御"><a href="#四-基于区块链的防御" class="headerlink" title="四 基于区块链的防御"></a>四 基于区块链的防御</h2><p>区块链被设计时就已经考虑了安全因素（比如分布式数据储存的特点），但还有很多方面可以继续提升。而且，企业主和研究者们也在安全领域开始探索，用最先进的技术构建新颖的安全体系。有一些开始使用区块链作为去中心安全架构的基础。[8]</p>
+<h3 id="A-增加区块链安全性"><a href="#A-增加区块链安全性" class="headerlink" title="A 增加区块链安全性"></a>A 增加区块链安全性</h3><p>为在原始区块链技术上继续提高，已诞生新的安全增强方式，为矿工与社区保驾护航，例如：</p>
+<ul>
+<li>智能矿池：一种与现有的点对点网络不同的管理矿池的提案。安全性的增强来源于对不同批次贡献提交的更好管理和智能合约在矿池中的实施。[9]</li>
+<li>量化框架：两部分组成，第一部分是区块链模拟器，第二部分是安全模型，模型提供解决双花问题、自私挖矿攻击的最佳参数。[10]</li>
+<li>OYENTE：一个在智能合约编程中的错误检测方法，分析有关的字节码，查找交易序列、异常处理、完整合约复用等方面的漏洞。[11]</li>
+<li>Hawk：一种隐私保护机制，不再在区块链中储存“明文“交易细节，也不需要额外使用混淆、加密等策略建立安全层。[12]</li>
+<li>Town crier：为智能合约系统提供授权数据馈送的系统，这些智能合约一般要从区块链外部数据源获取一些数据。范畴包括可以影响合约的，具有安全证书，能通过安全保护层的数据渠道，提供如股票价格，政务信息等信息。[13]</li>
+<li>Ledger：一家生产销售安全软硬件的公司，其中基于硬件的加密货币钱包可以储存管理加密货币，应用于客户操作系统BOLOS(Blockchain Open Ledger Operation System)，硬件产品则有加密防篡改芯片（ANNSSI和EAL5+）。<br>以上大多数方案已被文献[14]收录，正如后面叙述的，只有类OYENTE在现实中广泛使用。可能在不远的将来以上很多方法将融入不同区块链平台。但是这样的商业化将需要大量时间和资源来扩散与接纳。</li>
+</ul>
+<h3 id="B-利用区块链技术的新安全工具"><a href="#B-利用区块链技术的新安全工具" class="headerlink" title="B 利用区块链技术的新安全工具"></a>B 利用区块链技术的新安全工具</h3><p>区块链还应用在很多保护现有工作环境的情况下。目前，已存在很多处于起步阶段和得到认可的方法论，旨在利用区块链来达到不同功能，例如提高可靠性，更好的数据保护机制，整体网络安全平台。我们罗列这些解决方法并以核心功能分类，举出相关公司和产品，描述概况并解释如何利用区块链。</p>
+<ul>
+<li>数字身份(如Cambridge Blockchain, Civic, Evernym, GemOS, NuID, ShoCard)。Civic是一家基于生物识别认证的网络平台。它构想一个宏大的应用场景，一切个人信息如社会，经济，医疗信息都通过区块链在“按需“基础上进行保存和分享。它使得面对任何种类的信息分享，信息的所有者都有对自身信息的完全控制。Cambridge Blockchain对类似的数字身份平台提供一层承诺层，帮助公司完成对欧盟一般数据保护条例（GDPR）和其他规定的承诺。</li>
+<li>认证和权限管理（如REMME, NuCypher, Nuggets）。REMME在向不同设备提供SSL（加密嵌套字协议层）时不使用密码认证而是使用私有链。因此，入侵者不能轻易通过伪造证书提权，而这种方式也消除大多数人为因素的的攻击，如键盘记录，暴力破解和某些形式的钓鱼攻击。而Nuggets侧重于电子商务场景中将购买记录加密入链。</li>
+<li>安全平台（如Block Armour, Guardtime）。Guardtime提供全方位的区块链技术栈，从后端数据库管理，到中间件和安全交易处理。其基础是链接时间戳，这种技术用于区块链工作量证明和智能合约。此外近年来，公司进行了一些创新，例如轨迹泄漏和纯净软件篡改的归因，后量子签名和防篡改硬件等。Block Armour则发展一种叫区块链防御周径（Blockchain Defined Perimeter, BDP）的技术来创建零信任结构。它使核心系统难以被发现，因此避免成为攻击目标，同时向合法使用者提供安全的连接通道。</li>
+<li>隐私管理（如MindSafe, Obsidian）。Obsidian利用分布式账本技术进行元数据分散，达到消息元数据隐私保护的效果。这种方式针对的是现存的端对端加密方式，如Facebook Messenger, WhatsApp, 消息内容被加密传输，但重要的元数据仍保留在公司手中（公司所有者拥有完全的权限）。而MindSafe试图更进一步，使用区块链结构创建匿名、去中心的网络进行安全的交流和文件分享。</li>
+<li>分布式拒绝服务攻击防护（如Gladius, Nebulis）。Nebulis构想仿照以太坊来构造域名解析系统（DNS）的预警机制，域名解析系统现用于将网络协议（IP）地址，转为人类可读的统一资源定位符（URLs）。但是其目前状态未知，表明该解决方案未能成功进行商业扩展。Gladius接受此概念并提出解决方法。此公司计划使用区块链创建传统内容分发网络（CDN）和页面应用防火墙（WAF）的分布式版本，可以进行重定向和更好处理可能发生的巨量数据或请求。</li>
+<li>数据管理（如Datum, Gospel Technology）。Gospel创建了私有链，为上下文数据访问和应用间批量数据交换等数据分析行为进行全方位保护。Datum结合区块链与智能合约，为社会和物联网数据提供去中心化的交易场所。换句话说，在符合规定的情况下，平台提供存储数据的买卖服务。</li>
+<li>物联网安全（如xage security）。Xage是为物联网安全设计的区块链项目。它使用去中心的共识机制来识别和隔离不良设备与应用。例如，当一个新设备连入现有生产环境，共识机制验证其目的，若判定其为不良，阻止隔离进一步交流。因此，可以将其视为自愈机制，每个边界设备都自动遵守安全策略，保证用户的更好控制和大多数粒度下的应用安全。</li>
+<li>漏洞管理（如Synthetic Minds）。Synthetic Minds设想通过自动化分析和生成智能合约代码以避免系统错误和漏洞性。而它并不着重OYENTE方案的四个方面，它为学术研究到现实应用提供了另一种方法。此外，通过“自动编码”来创建安全智能合约和模拟合约行为将扩展现有防护工具的范畴，并使非技术用户可以利用下一代技术的优点。<br>这二十家公司清楚展现了创新技术的不同应用案例。如今，最广泛使用的基于区块链的安全技术是身份认证和权限管理工具，约有45%的认证公司采取该类技术。而很多公司也表明，区块链技术不光可能会解决重大问题如DdoS防护或数据管理，还有可能用于防护体系的不同层级，提供策略与服务（或是技术栈），为防御半径的设计提供新思路。</li>
+</ul>
+<h2 id="五-结论"><a href="#五-结论" class="headerlink" title="五 结论"></a>五 结论</h2><p>尽管作为新生技术区块链诞生至今只有11年，但其已得到世界范围的广泛关注。区块链技术由于自身特性十分具有吸引力。正如文章所讲，存在有许多针对区块链的攻击。迄今为止，大多数攻击目的都是偷取加密货币或者利用勒索手段勒索。事物都有两面性，目前区块链技术也应用在提高安全性上，可以辐射其它领域。但是，由于几乎没有成功的商业实施，因此在针对区块链的攻防战中，还是攻击者处于领先地位。<br>但是，在间接使用技术的层次上，几乎不存在大规模利用区块链成功对其它系统产生不良影响的案例。这并不意味着不存在零日漏洞，而是还没有在公众知悉的攻击中被探讨或使用。此外，企业家们利用区块链找出新的方法解决现存网络安全问题。防御者的工具池得到大大拓展，回答了很多痛点问题，例如数字身份，认证，隐私，分布式拒绝服务攻击保护，物联网安全和脆弱性管理。所有的这些都使区块链间接应用向积极方向发展，而目前也有很多商业化项目，可以在现存的环境下以“附件”形式实施，不需要太大的时间和费用开销。但是，离已经成功部署的技术（如防火墙）相比，这些技术解决方案得到产业级别的普及还有很长的路。<br>因此，我们相信，在产业水平上，区块链能为网络安全提供积极意义。即使得到更多恶意使用者的采用，这个观点还是成立的。因为与成为可能的攻击载体相比，间接防御解决方案的潜力和广度更高。而且随着采取防护手段带来的规模效应，防护手段的部署会产生额外好处。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/cs/" rel="tag"># cs</a>
+          
+            <a href="/tags/密码学/" rel="tag"># 密码学</a>
+          
+            <a href="/tags/区块链/" rel="tag"># 区块链</a>
+          
+            <a href="/tags/翻译文章/" rel="tag"># 翻译文章</a>
+          
+            <a href="/tags/网络安全/" rel="tag"># 网络安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/08/27/Oracle的表、表空间、数据文件以及用户/" rel="next" title="Oracle的表、表空间、数据文件以及用户">
+                <i class="fa fa-chevron-left"></i> Oracle的表、表空间、数据文件以及用户
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/08/28/国家标准加密算法介绍与实现[0]-前导知识/" rel="prev" title="国家标准加密算法介绍与实现[0]-前导知识">
+                国家标准加密算法介绍与实现[0]-前导知识 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Rice Chang</p>
+              <p class="site-description motion-element" itemprop="description">我们穿越长城</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#区块链在网络安全中的未来角色——基于区块链技术平台的防护与攻击可能性分析"><span class="nav-number">1.</span> <span class="nav-text">区块链在网络安全中的未来角色——基于区块链技术平台的防护与攻击可能性分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关键词"><span class="nav-number">1.2.</span> <span class="nav-text">关键词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一-引言"><span class="nav-number">1.3.</span> <span class="nav-text">一 引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-框架划分"><span class="nav-number">1.4.</span> <span class="nav-text">二 框架划分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-功能维度"><span class="nav-number">1.4.1.</span> <span class="nav-text">A 功能维度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-影响维度"><span class="nav-number">1.4.2.</span> <span class="nav-text">B 影响维度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-基于区块链的攻击"><span class="nav-number">1.5.</span> <span class="nav-text">三 基于区块链的攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-针对区块链实施的直接攻击方式"><span class="nav-number">1.5.1.</span> <span class="nav-text">A 针对区块链实施的直接攻击方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-使用区块链来攻击和影响其他平台"><span class="nav-number">1.5.2.</span> <span class="nav-text">B 使用区块链来攻击和影响其他平台</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-基于区块链的防御"><span class="nav-number">1.6.</span> <span class="nav-text">四 基于区块链的防御</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-增加区块链安全性"><span class="nav-number">1.6.1.</span> <span class="nav-text">A 增加区块链安全性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-利用区块链技术的新安全工具"><span class="nav-number">1.6.2.</span> <span class="nav-text">B 利用区块链技术的新安全工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-结论"><span class="nav-number">1.7.</span> <span class="nav-text">五 结论</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rice Chang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
