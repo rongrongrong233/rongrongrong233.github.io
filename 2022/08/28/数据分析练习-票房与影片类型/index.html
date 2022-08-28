@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="这是数据分析课程的作业之一，分析了票房、电影类型、年代等因素。使用了Excel软件的pq功能，还是很吼用的。撰写了简单的分析报告">
+<meta name="keywords" content="数据组织与分析,小练习,统计学,PowerQuery">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据分析练习-票房与影片类型">
+<meta property="og:url" content="http://yoursite.name/2022/08/28/数据分析练习-票房与影片类型/index.html">
+<meta property="og:site_name" content="Sid Wu的小站">
+<meta property="og:description" content="这是数据分析课程的作业之一，分析了票房、电影类型、年代等因素。使用了Excel软件的pq功能，还是很吼用的。撰写了简单的分析报告">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.name/pic/11.png">
+<meta property="og:image" content="http://yoursite.name/pic/12.png">
+<meta property="og:image" content="http://yoursite.name/pic/13.png">
+<meta property="og:image" content="http://yoursite.name/pic/14.png">
+<meta property="og:updated_time" content="2022-08-28T03:57:52.833Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据分析练习-票房与影片类型">
+<meta name="twitter:description" content="这是数据分析课程的作业之一，分析了票房、电影类型、年代等因素。使用了Excel软件的pq功能，还是很吼用的。撰写了简单的分析报告">
+<meta name="twitter:image" content="http://yoursite.name/pic/11.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.name/2022/08/28/数据分析练习-票房与影片类型/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>数据分析练习-票房与影片类型 | Sid Wu的小站</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sid Wu的小站</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Where are you now?</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.name/2022/08/28/数据分析练习-票房与影片类型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sid Wu">
+      <meta itemprop="description" content="我们穿越长城">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sid Wu的小站">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据分析练习-票房与影片类型
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2022-08-28 11:51:36 / 修改时间：11:57:52" itemprop="dateCreated datePublished" datetime="2022-08-28T11:51:36+08:00">2022-08-28</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong><em>这是数据分析课程的作业之一，分析了票房、电影类型、年代等因素。使用了Excel软件的pq功能，还是很吼用的。</em></strong><br><strong><em>撰写了简单的分析报告</em></strong><br><a id="more"></a></p>
+<h2 id="题目背景"><a href="#题目背景" class="headerlink" title="题目背景"></a>题目背景</h2><p>电影业是高度竞争的产业，每年都会有成千上万的影片出炉，这些影片中，有的成本动不动就是几亿美元，一些影片票房盈利上亿美元，有的甚至会出现入不抵支。<br>下表是美国票房收入排名前 50 的影片的有关数据，其中，上映年份、限制级别、题材为属性变量，可比价计算的美国票房收入、预算（现价）、其他地区的票房收入（现价）、美国票房收入（现价）属于数量变量。<br>（表格数据见 Top50Movies 数据文件）<br>根据上述资料，运用数据可视化方法对变量进行分析，并撰写管理报告，该报告中需要含有以下要点：<br>第一，绘制散点图，并通过散点图检查发行年份和美国票房收入（可比价）之间的关系。其中，散点图中应包含趋势线，并说说随着时间变化，美国国内票房收入是怎样变动的。<br>第二，绘制散点图，并谈谈预算和世界其他各地票房收入（现价）之间的关系。<br>第三，对美国国内票房收入（可比价）创建频数分布、百分比分布和直方图，并分析是否存在异常值。<br>第四，对限制级别和题材数据，创建数据透视表，并进行适当的分析。运用数据筛选功能，对 1980 年之后发行的电影进行考察，谈谈电影发行者的喜好是否随时间发生了变化。<br>第五，对限制级别和题材的美国国内票房收入（可比价），编制数据透视表，并解释所得到的结果。</p>
+<h2 id="分级概述"><a href="#分级概述" class="headerlink" title="分级概述"></a>分级概述</h2><p>G级：一般观众（General Audiences）<br>所有年龄皆可观赏。电影中不含或仅含少量会让家长在让儿童观赏时感到被冒犯的内容。例如：《公主与青蛙》。<br>PG级：建议家长指导（Parental Guidance Suggested）<br>有些内容可能不适合儿童。由于影片包含部分家长可能认为不适合儿童的内容，因此建议家长在可同时进行指导。例如：《爱丽丝梦游奇境》、《名侦探皮卡丘》。<br>PG-13级：家长需特别注意（Parents Strongly Cautioned）<br>由于影片包含部分家长可能认为不适合13岁以下观看的内容，因此建议家长需特别注意。例如：《复仇者联盟》。<br>R级：限制级（Restricted）<br>未满十七岁必须由家长或成年监护人陪同才能入场观看。例如：《死侍》《五十度灰》。<br>UR级：未分级（Unrated）<br>未送至MPAA（美国电影协会）评级。<br>注：IMDB、烂番茄上Cleopatra (1963)（《埃及艳后》1963年版）分级为G，统计数据中分级为UR，暂认为是G级。</p>
+<h2 id="数据及分析"><a href="#数据及分析" class="headerlink" title="数据及分析"></a>数据及分析</h2><p><img src="/pic/11.png" alt></p>
+<p>在对美国票房收入排名前五十的题材统计中，剧情片数量占比最高，科幻片、动画片占比次高，分别为30%、24%、18%，占据了将近七成的电影数量。</p>
+<p><img src="/pic/12.png" alt></p>
+<p>在对美国票房收入排名前五十的分级统计中，G级、PG级、PG-13级占据了超九成的电影数量。<br>从这些数据可以看出，得到更高票房的电影一般都是吸引人们阖家来电影院观看的电影，集中在非暴力、非色情、适合全体年龄段的领域。结果表明，儿童的意愿或观影倾向可能导致了父母对票房的贡献，也有可能是父母对电影预期的看法影响了一家人连同孩子是否进入电影院。</p>
+<p><img src="/pic/13.png" alt></p>
+<p>在对不同分级电影的题材统计中，发现G级中动画片比例最高，PG/PG-13级中奇幻/科幻题材更多，R级中喜剧最多。结果表明，适合最广泛人群观看的是动画片；而青少年或许想象力、求知欲最丰富，发行者认为奇幻/科幻电影具有吸引力；而R级片中喜剧最多，或许是因为人们的喜剧总离不开那些有些庸俗的情节吧。</p>
+<p><img src="/pic/14.png" alt></p>
+<p>对1980年前后的题材统计对比发现，1980年前的题材更为广泛，剧情片最多；而1980年后题材种类减少且集中，科幻/奇幻片比例达到50%。似乎意味着科幻电影的大爆发，也可能与电影行业特效技术的进步有关。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据组织与分析/" rel="tag"># 数据组织与分析</a>
+          
+            <a href="/tags/小练习/" rel="tag"># 小练习</a>
+          
+            <a href="/tags/统计学/" rel="tag"># 统计学</a>
+          
+            <a href="/tags/PowerQuery/" rel="tag"># PowerQuery</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/08/28/租车数据分析练习/" rel="next" title="租车统计数据分析练习">
+                <i class="fa fa-chevron-left"></i> 租车统计数据分析练习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/08/28/Pandas学习日志[0]-series/" rel="prev" title="Pandas学习日志[0]-series">
+                Pandas学习日志[0]-series <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Sid Wu</p>
+              <p class="site-description motion-element" itemprop="description">我们穿越长城</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目背景"><span class="nav-number">1.</span> <span class="nav-text">题目背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分级概述"><span class="nav-number">2.</span> <span class="nav-text">分级概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据及分析"><span class="nav-number">3.</span> <span class="nav-text">数据及分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sid Wu</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

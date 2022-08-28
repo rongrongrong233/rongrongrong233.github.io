@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="这是数据分析课程的作业之一，使用kaggle上的数据集，进行租车数据及其因素的有关分析。">
+<meta name="keywords" content="数据组织与分析,Pandas,Python,小练习,统计学,PowerQuery">
+<meta property="og:type" content="article">
+<meta property="og:title" content="租车统计数据分析练习">
+<meta property="og:url" content="http://yoursite.name/2022/08/28/租车数据分析练习/index.html">
+<meta property="og:site_name" content="Sid Wu的小站">
+<meta property="og:description" content="这是数据分析课程的作业之一，使用kaggle上的数据集，进行租车数据及其因素的有关分析。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.name/pic/15.png">
+<meta property="og:image" content="http://yoursite.name/pic/16.png">
+<meta property="og:image" content="http://yoursite.name/pic/17.png">
+<meta property="og:image" content="http://yoursite.name/pic/18.png">
+<meta property="og:image" content="http://yoursite.name/pic/19.png">
+<meta property="og:image" content="http://yoursite.name/pic/20.png">
+<meta property="og:image" content="http://yoursite.name/pic/21.png">
+<meta property="og:image" content="http://yoursite.name/pic/22.png">
+<meta property="og:image" content="http://yoursite.name/pic/23.png">
+<meta property="og:image" content="http://yoursite.name/pic/24.png">
+<meta property="og:image" content="http://yoursite.name/pic/25.png">
+<meta property="og:image" content="http://yoursite.name/pic/26.png">
+<meta property="og:image" content="http://yoursite.name/pic/27.png">
+<meta property="og:image" content="http://yoursite.name/pic/28.png">
+<meta property="og:image" content="http://yoursite.name/pic/29.png">
+<meta property="og:image" content="http://yoursite.name/pic/30.png">
+<meta property="og:image" content="http://yoursite.name/pic/31.png">
+<meta property="og:image" content="http://yoursite.name/pic/32.png">
+<meta property="og:updated_time" content="2022-08-28T04:18:42.240Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="租车统计数据分析练习">
+<meta name="twitter:description" content="这是数据分析课程的作业之一，使用kaggle上的数据集，进行租车数据及其因素的有关分析。">
+<meta name="twitter:image" content="http://yoursite.name/pic/15.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.name/2022/08/28/租车数据分析练习/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>租车统计数据分析练习 | Sid Wu的小站</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sid Wu的小站</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Where are you now?</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.name/2022/08/28/租车数据分析练习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sid Wu">
+      <meta itemprop="description" content="我们穿越长城">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sid Wu的小站">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">租车统计数据分析练习
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2022-08-28 11:42:42 / 修改时间：12:18:42" itemprop="dateCreated datePublished" datetime="2022-08-28T11:42:42+08:00">2022-08-28</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong><em>这是数据分析课程的作业之一，使用kaggle上的数据集，进行租车数据及其因素的有关分析。</em></strong><br><a id="more"></a></p>
+<h2 id="1-数据集说明"><a href="#1-数据集说明" class="headerlink" title="1 数据集说明"></a>1 数据集说明</h2><h3 id="1-1-数据来源："><a href="#1-1-数据来源：" class="headerlink" title="1.1 数据来源："></a>1.1 数据来源：</h3><p>kaggles竞赛——城市共享单车系统的使用预测<br>（地址：<a href="https://www.kaggle.com/c/bike-sharing-demand/overview）" target="_blank" rel="noopener">https://www.kaggle.com/c/bike-sharing-demand/overview）</a></p>
+<h3 id="1-3-数据组成："><a href="#1-3-数据组成：" class="headerlink" title="1.3 数据组成："></a>1.3 数据组成：</h3><p>train.csv记录了2011-2012年每个月的前二十天，每小时的共享单车租用和环境情况。而test.csv记录了2011-2012年每个月剩余天数，每小时共享单车租用和环境情况。sampleSubmission.csv没有记录数据，用于原竞赛问题中预测每个月20日后每小时共享单车租赁情况，与test.csv进行拟合。</p>
+<h3 id="1-4-字段意义："><a href="#1-4-字段意义：" class="headerlink" title="1.4 字段意义："></a>1.4 字段意义：</h3><p>datetime - 准确到小时的时间<br>season - 1=春天，2=夏天，3=秋天，4=冬天<br>holiday - 当前日期是否为假期（0表示不是，1表示是）<br>workingday - 当前日期是否为工作日（0表示不是，1表示是）<br>weather –<br>1=晴朗，多云或部分多云<br>2=雾+多云，雾+碎云(broken clouds），雾+少云，雾<br>3=小雪，小雨+雷雨+散云(scattered clouds），小雨+散云(scattered clouds）<br>4=大雨+冰珠(ice pellets)+雷暴+雾、雪+雾<br>temp - 温度（摄氏度）<br>atemp - 体感温度（摄氏度）<br>humidity – 相对湿度<br>windspeed – 风速<br>casual – 非注册用户数量<br>registered -注册用户数量<br>count – 用户总数量</p>
+<h2 id="2-数据分析"><a href="#2-数据分析" class="headerlink" title="2 数据分析"></a>2 数据分析</h2><h3 id="2-1-对气象数据进行描述性统计："><a href="#2-1-对气象数据进行描述性统计：" class="headerlink" title="2.1 对气象数据进行描述性统计："></a>2.1 对气象数据进行描述性统计：</h3><p> <img src="/pic/15.png" alt></p>
+<p>发现风速众数为零，均值为12.80，中位数13.00，这是一个很不寻常的事情。</p>
+<p> <img src="/pic/16.png" alt></p>
+<p>使用数字透视表对其进行统计，发现0值过多，怀疑并不是真的风速为0而是数据缺失。因为其占总数据的超过10%，且本身就是众数，不宜直接删除。选择中位数进行填充。</p>
+<p> <img src="/pic/17.png" alt></p>
+<p>填充过后如上图所示，与填充之前进行对比。然后正式开始对天气情况和数据分析，利用相关系数矩阵可以发现：</p>
+<p> <img src="/pic/18.png" alt></p>
+<p>初步认为温度、体感温度、风速对租车人数有正相关关系，湿度、天气严峻程度有负相关关系。</p>
+<h2 id="3-进一步观测"><a href="#3-进一步观测" class="headerlink" title="3 进一步观测"></a>3 进一步观测</h2><p>我们主要选择温度（体感温度）、湿度、天气严峻程度来观察对租车人数的相关关系，使用线性趋势线和多项式趋势线进行进一步观测。</p>
+<h3 id="3-1-选取温度（体感温度）对租车人数进行研究"><a href="#3-1-选取温度（体感温度）对租车人数进行研究" class="headerlink" title="3.1 选取温度（体感温度）对租车人数进行研究"></a>3.1 选取温度（体感温度）对租车人数进行研究</h3><p><img src="/pic/19.png" alt></p>
+<p>此时趋势线为y = 8.3316x - 5.5114 R² = 0.1519</p>
+<p><img src="/pic/20.png" alt><br><img src="/pic/21.png" alt></p>
+<p>使用散点图进行多项式拟合时可以发现，总租车人数随温度提升而先上升后下降，大约在37度之前是上升的，37度之后是下降的。这种趋势直观来看是十分明显的。</p>
+<h3 id="3-2-选取湿度对租车人数进行研究"><a href="#3-2-选取湿度对租车人数进行研究" class="headerlink" title="3.2 选取湿度对租车人数进行研究"></a>3.2 选取湿度对租车人数进行研究</h3><p><img src="/pic/22.png" alt></p>
+<p>此时趋势线为y = -36.768x + 243.73 R² = 0.0166</p>
+<p><img src="/pic/23.png" alt><br><img src="/pic/24.png" alt></p>
+<p>使用散点图进行多项式拟合时可以发现，总租车人数随湿度提升而先上升后下降。在湿度25以前，这种趋势是上升的。25以后，人数是下降的。这种趋势直观来看是比较明显的。</p>
+<h3 id="3-3-选取天气情况对租车人数进行研究"><a href="#3-3-选取天气情况对租车人数进行研究" class="headerlink" title="3.3 选取天气情况对租车人数进行研究"></a>3.3 选取天气情况对租车人数进行研究</h3><p><img src="/pic/25.png" alt></p>
+<p>此时趋势线为y = -2.9873x + 376.45 R² = 0.1007 </p>
+<p><img src="/pic/26.png" alt><br><img src="/pic/27.png" alt></p>
+<p>使用散点图进行多项式拟合时可以发现，随天气的逐渐变差，租车量也是逐渐下降的。值得注意的是，天气为4（极差）时，只有一条记录。可以认为不具有代表性并去除：</p>
+<p><img src="/pic/28.png" alt></p>
+<p>以上的趋势分析可以初步看出，温度（体感温度）、湿度、天气严峻程度与单车的租赁量有线性关系，但R^2值均较小，解释能力均较弱，需要建立多元回归模型来综合观测天气原因对租赁自行车数量的影响。</p>
+<h2 id="4-建立多元线性回归模型"><a href="#4-建立多元线性回归模型" class="headerlink" title="4 建立多元线性回归模型"></a>4 建立多元线性回归模型</h2><p>X1：weather<br>X2：temp（因与atemp存在多重共线性问题，只选择了temp）<br>X3：humidity<br>X4：windspeed<br>Y：count<br>得到关系式：Y = 180.50+3.59X1+8.74X2-2.79X3+0.13X4</p>
+<p><img src="/pic/29.png" alt></p>
+<p>发现R^2=0.24，模型解释了24%的方差<br>发现Significance F = 0，说明认为方程具有线性关系是显著的，通过F检验。<br>发现X2、X3的p&lt;0.01，可以认为通过t检验，对Y具有显著影响。<br>很明显，建立的多元回归线性模型效果不是很好，不能很好的达到预测需求。下面采用随机森林方法建立模型。</p>
+<h2 id="5-随机森林回归建立模型"><a href="#5-随机森林回归建立模型" class="headerlink" title="5 随机森林回归建立模型"></a>5 随机森林回归建立模型</h2><h2 id="5-1随机森林回归简介"><a href="#5-1随机森林回归简介" class="headerlink" title="5.1随机森林回归简介"></a>5.1随机森林回归简介</h2><p>随机森林方法属于集成学习（Ensemble Learning）中的bagging算法，基本过程是从原始样本集中使用Bootstraping方法随机抽取n个训练样本，共进行k轮抽取，得到k个训练集；对于k个训练集，训练k个模型。针对回归问题，由k个模型预测结果的均值作为最后预测结果。结合决策树，在决策树的根部，所有的样本都在这里，此时树还没有生长，这棵树的残差平方和就是回归的残差平方和。然后选择一个变量（特征），这个变量（特征）使得通过这个进行分类后的、两部分的、分别的残差平方和之和最小。然后在分叉的两个节点处，再利用这样的准则，选择之后的分类属性。一直这样下去，直到生成一颗完整的树， 得到最终最优模型。<br>简言之，随机森林方法可以应对过多变量造成的过拟合现象。通过随机选取变量，在原来过多变量的基础上，减少了决策变量（特征），使得最后的模型既可以很好的解释变量对样本结果的影响，又可以避免模型只适用于样本数据，不很好覆盖于样本外其它实际数据的问题。</p>
+<h2 id="5-2使用python随机森林回归建立模型"><a href="#5-2使用python随机森林回归建立模型" class="headerlink" title="5.2使用python随机森林回归建立模型"></a>5.2使用python随机森林回归建立模型</h2><p>首先，对count的数据进行预处理，发现count严重左偏，且方差很大，所以使用对数变换进行预处理。</p>
+<p> <img src="/pic/30.png" alt></p>
+<p>处理前</p>
+<p> <img src="/pic/31.png" alt></p>
+<p>处理后<br>然后合并数据集并格式化时间参数。由于源数据由两部分组成，train.csv和test.csv，那么就建立模型预测test.csv中没给出的租车数据。<br>针对模型中特征进行分类划分。因为讨论天气对租车条件的影响，所以主要针对时间和天气进行建模。<br>接下来就是导入模型并进行预测，输出信息至predict_concat.csv，并绘制租车数量和时间的关系图</p>
+<p> <img src="/pic/32.png" alt></p>
+<h2 id="5-3-模型建立的源代码"><a href="#5-3-模型建立的源代码" class="headerlink" title="5.3 模型建立的源代码"></a>5.3 模型建立的源代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*- </span></span><br><span class="line"><span class="comment"># 第一行别乱动，祖传的代码</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> sklearn</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestRegressor</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载文件</span></span><br><span class="line">train = pd.read_csv(<span class="string">r'train(only weather).csv'</span>)</span><br><span class="line">test = pd.read_csv(<span class="string">r'test.csv'</span>)</span><br><span class="line"><span class="comment"># 查看是否读取成功</span></span><br><span class="line"><span class="comment"># train.info()</span></span><br><span class="line"><span class="comment"># test.info()</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">#查看cout密度分布</span></span><br><span class="line"><span class="string">f,ax = plt.subplots(figsize=(10,5)) # 大小</span></span><br><span class="line"><span class="string">sns.distplot(train['count'])</span></span><br><span class="line"><span class="string">ax.set_title('Distribution of count') # 标题</span></span><br><span class="line"><span class="string">plt.savefig(r'Distribution of count',dpi=200) # 保存图片和位置</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 去掉三个标准差外的租车数据并进行对数代换,输出图像</span></span><br><span class="line">train_WithoutOutliers=train[np.abs(train[<span class="string">'count'</span>]-train[<span class="string">'count'</span>].mean())&lt;=<span class="number">3</span>*train[<span class="string">'count'</span>].std()]</span><br><span class="line">yLabels=np.log(train_WithoutOutliers[<span class="string">'count'</span>])</span><br><span class="line">train_WithoutOutliers.loc[:,<span class="string">'count_log'</span>]=yLabels</span><br><span class="line"><span class="comment"># train_WithoutOutliers.info()</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">sns.distplot(yLabels)</span></span><br><span class="line"><span class="string">plt.title('Distribution of count after log')</span></span><br><span class="line"><span class="string">plt.savefig(r'log')</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 合并数据集</span></span><br><span class="line">df = train_WithoutOutliers.append(test,ignore_index=<span class="keyword">True</span>)</span><br><span class="line">df = pd.DataFrame(df,columns=train_WithoutOutliers.columns)</span><br><span class="line"><span class="comment"># 格式化其中日期的object对象</span></span><br><span class="line">df[<span class="string">'datetime'</span>]=pd.to_datetime(df[<span class="string">'datetime'</span>],format=<span class="string">'%Y-%m-%d %H:%M:%S'</span>)</span><br><span class="line">df[<span class="string">'year'</span>]=df[<span class="string">'datetime'</span>].dt.year</span><br><span class="line">df[<span class="string">'month'</span>]=df[<span class="string">'datetime'</span>].dt.month</span><br><span class="line">df[<span class="string">'hour'</span>]=df[<span class="string">'datetime'</span>].dt.hour</span><br><span class="line">df.info()</span><br><span class="line"></span><br><span class="line"><span class="comment"># temph和atemp比较相近，将两个特征转化为一个特征</span></span><br><span class="line">df[<span class="string">'temp_mean'</span>]=(df[<span class="string">'temp'</span>]+df[<span class="string">'atemp'</span>])/<span class="number">2</span></span><br><span class="line"><span class="comment"># 将分类型特征进行onehot编码</span></span><br><span class="line">weather_dummy=pd.get_dummies(df[<span class="string">'weather'</span>],prefix=<span class="string">'weather'</span>)</span><br><span class="line">month_dummy=pd.get_dummies(df[<span class="string">'month'</span>],prefix=<span class="string">'month'</span>)</span><br><span class="line"><span class="comment"># 合并特征</span></span><br><span class="line">feature=pd.concat([df[[<span class="string">'temp_mean'</span>,<span class="string">'windspeed'</span>,<span class="string">'humidity'</span>,<span class="string">'year'</span>,<span class="string">'hour'</span>]],weather_dummy,month_dummy],axis=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分离训练集和测试集</span></span><br><span class="line">df_train=df[df[<span class="string">'count'</span>].notnull()].sort_values(<span class="string">'datetime'</span>,ascending=<span class="keyword">True</span>)</span><br><span class="line">df_test=df[df[<span class="string">'count'</span>].isnull()].sort_values(<span class="string">'datetime'</span>,ascending=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 丢弃掉不要的列</span></span><br><span class="line">drop_columns=[<span class="string">'datetime'</span>,<span class="string">'weather'</span>,<span class="string">'casual'</span>,<span class="string">'registered'</span>,<span class="string">'count'</span>,<span class="string">'month'</span>,<span class="string">'temp'</span>,<span class="string">'atemp'</span>,<span class="string">'windspeed'</span>]</span><br><span class="line">df_train=df_train.drop(columns=drop_columns,axis=<span class="number">1</span>)</span><br><span class="line">df_test=df_test.drop(columns=drop_columns,axis=<span class="number">1</span>)</span><br><span class="line">count_log=df_train[<span class="string">'count_log'</span>]</span><br><span class="line">df_train.drop(<span class="string">'count_log'</span>,axis=<span class="number">1</span>,inplace=<span class="keyword">True</span>)</span><br><span class="line">df_test.drop(<span class="string">'count_log'</span>,axis=<span class="number">1</span>,inplace=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 导入随机森林回顾模型</span></span><br><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestRegressor</span><br><span class="line"><span class="comment"># 建模</span></span><br><span class="line">model = RandomForestRegressor(n_estimators=<span class="number">1000</span>,random_state=<span class="number">42</span>)</span><br><span class="line">model.fit(df_train,count_log)</span><br><span class="line"><span class="comment"># 预测</span></span><br><span class="line">pred=model.predict(df_test)</span><br><span class="line"><span class="comment"># 原来进行了对数变化，现将其变回来</span></span><br><span class="line">pred_exp=np.exp(pred)</span><br><span class="line">pred_exp=pd.Series(pred_exp,name=<span class="string">'count'</span>)</span><br><span class="line">pred_concat=pd.concat([test[<span class="string">'datetime'</span>],pred_exp],axis=<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 导出数据</span></span><br><span class="line">pred_concat.to_csv(<span class="string">r'predict_concat.csv'</span>,index=<span class="keyword">False</span>)</span><br><span class="line">model.</span><br><span class="line"><span class="comment"># 保存模型</span></span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"model.pkl"</span>, <span class="string">"wb"</span>) <span class="keyword">as</span> f:</span><br><span class="line">pickle.dump(model, f)</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据组织与分析/" rel="tag"># 数据组织与分析</a>
+          
+            <a href="/tags/Pandas/" rel="tag"># Pandas</a>
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/小练习/" rel="tag"># 小练习</a>
+          
+            <a href="/tags/统计学/" rel="tag"># 统计学</a>
+          
+            <a href="/tags/PowerQuery/" rel="tag"># PowerQuery</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/08/28/weka数据分析练习/" rel="next" title="weka数据分析练习">
+                <i class="fa fa-chevron-left"></i> weka数据分析练习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/08/28/数据分析练习-票房与影片类型/" rel="prev" title="数据分析练习-票房与影片类型">
+                数据分析练习-票房与影片类型 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Sid Wu</p>
+              <p class="site-description motion-element" itemprop="description">我们穿越长城</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-数据集说明"><span class="nav-number">1.</span> <span class="nav-text">1 数据集说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-数据来源："><span class="nav-number">1.1.</span> <span class="nav-text">1.1 数据来源：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-数据组成："><span class="nav-number">1.2.</span> <span class="nav-text">1.3 数据组成：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-字段意义："><span class="nav-number">1.3.</span> <span class="nav-text">1.4 字段意义：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-数据分析"><span class="nav-number">2.</span> <span class="nav-text">2 数据分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-对气象数据进行描述性统计："><span class="nav-number">2.1.</span> <span class="nav-text">2.1 对气象数据进行描述性统计：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-进一步观测"><span class="nav-number">3.</span> <span class="nav-text">3 进一步观测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-选取温度（体感温度）对租车人数进行研究"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 选取温度（体感温度）对租车人数进行研究</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-选取湿度对租车人数进行研究"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 选取湿度对租车人数进行研究</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-选取天气情况对租车人数进行研究"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 选取天气情况对租车人数进行研究</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-建立多元线性回归模型"><span class="nav-number">4.</span> <span class="nav-text">4 建立多元线性回归模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-随机森林回归建立模型"><span class="nav-number">5.</span> <span class="nav-text">5 随机森林回归建立模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1随机森林回归简介"><span class="nav-number">6.</span> <span class="nav-text">5.1随机森林回归简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2使用python随机森林回归建立模型"><span class="nav-number">7.</span> <span class="nav-text">5.2使用python随机森林回归建立模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-模型建立的源代码"><span class="nav-number">8.</span> <span class="nav-text">5.3 模型建立的源代码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sid Wu</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

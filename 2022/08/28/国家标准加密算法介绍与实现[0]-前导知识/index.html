@@ -113,10 +113,10 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="国家标准加密算法介绍与实现[0]-前导知识">
 <meta property="og:url" content="http://yoursite.name/2022/08/28/国家标准加密算法介绍与实现[0]-前导知识/index.html">
-<meta property="og:site_name" content="Rice Chang">
+<meta property="og:site_name" content="Sid Wu的小站">
 <meta property="og:description" content="本文介绍国密算法的前置知识由于公式较多，md渲染很成问题，待完善">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2022-08-28T02:38:14.054Z">
+<meta property="og:updated_time" content="2022-08-28T02:39:52.338Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="国家标准加密算法介绍与实现[0]-前导知识">
 <meta name="twitter:description" content="本文介绍国密算法的前置知识由于公式较多，md渲染很成问题，待完善">
@@ -136,7 +136,7 @@
   };
 </script>
 
-  <title>国家标准加密算法介绍与实现[0]-前导知识 | Rice Chang</title>
+  <title>国家标准加密算法介绍与实现[0]-前导知识 | Sid Wu的小站</title>
   
 
 
@@ -196,7 +196,7 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Rice Chang</span>
+        <span class="site-title">Sid Wu的小站</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -308,13 +308,13 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.name/2022/08/28/国家标准加密算法介绍与实现[0]-前导知识/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Rice Chang">
+      <meta itemprop="name" content="Sid Wu">
       <meta itemprop="description" content="我们穿越长城">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Rice Chang">
+      <meta itemprop="name" content="Sid Wu的小站">
     </span>
 
     
@@ -347,7 +347,7 @@
                 
               
 
-              <time title="创建时间：2022-08-28 09:20:27 / 修改时间：10:38:14" itemprop="dateCreated datePublished" datetime="2022-08-28T09:20:27+08:00">2022-08-28</time>
+              <time title="创建时间：2022-08-28 09:20:27 / 修改时间：10:39:52" itemprop="dateCreated datePublished" datetime="2022-08-28T09:20:27+08:00">2022-08-28</time>
             
 
             
@@ -385,7 +385,7 @@
       
 
       
-        <p><em>本文介绍国密算法的前置知识</em><br><em>由于公式较多，md渲染很成问题，待完善</em><br><a id="more"></a></p>
+        <p><strong><em>本文介绍国密算法的前置知识</em></strong><br><strong><em>由于公式较多，md渲染很成问题，待完善</em></strong><br><a id="more"></a></p>
 <h2 id="1-密码杂凑函数"><a href="#1-密码杂凑函数" class="headerlink" title="1  密码杂凑函数"></a>1  密码杂凑函数</h2><p>杂凑函数(Hash function)是现代密码学的重要组成，可以将任意符合限制长度的消息在一定时间内压缩成固定长度的摘要，这个摘要是不可逆且唯一的。因此，杂凑函数具有也具有错误检测的能力，原消息任何一个比特的变化都会导致杂凑值的巨大改变。杂凑算法被认为是密码学的三类基础算法之一（三类基础算法包括加解密算法，杂凑算法，数字签名算法），广泛应用于数据的完整性校验、基于散列链的认证协议、密钥管理、数字签名和数字证书，入侵检测和病毒检测等等。<br>而密码杂凑函数(Cryptographic hash function)是杂凑函数的一种，是在安全应用中使用的杂凑函数。与普通杂凑函数相比，密码杂凑函数设计的初衷就是为了更好抵抗恶意输入，提供更高的安全性。密码杂凑函数的形式为h=H_V (M)，h为计算出的杂凑值，v为输出散列值的长度，M为待计算的原消息。此外，还有一类需要密钥输入的杂凑函数，称为消息认证码（MAC）。本节介绍的是不带密钥的杂凑函数，可称为篡改检测码（MDC）。</p>
 <h2 id="1-1-密码杂凑函数的安全属性"><a href="#1-1-密码杂凑函数的安全属性" class="headerlink" title="1.1  密码杂凑函数的安全属性"></a>1.1  密码杂凑函数的安全属性</h2><p>在介绍安全属性之前，需要先了解密码学意义上的安全的定义。如果针对某种加密体制，无论有多少可使用的密文，花费多长的时间，都不足以唯一确定其对应的明文，可以认为这种体制是无条件安全的。但是，除了一次一密外，没有任何方案满足这一条件。因此，一般要求加密体制满足计算安全，即破解密码的代价超出密文信息的价值，或破解密码的时间超出密文信息的有效生命期。<br>从计算安全角度出发，密码杂凑函数共有三项基本安全属性：</p>
 <ol>
@@ -504,6 +504,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2022/08/28/法和经济学/" rel="prev" title="法和经济学">
+                法和经济学 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -561,7 +565,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">Rice Chang</p>
+              <p class="site-author-name" itemprop="name">Sid Wu</p>
               <p class="site-description motion-element" itemprop="description">我们穿越长城</p>
           </div>
 
@@ -572,7 +576,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-count">19</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -584,7 +588,7 @@
                 
                 
                 <div class="site-state-item site-state-tags">
-                  
+                  <a href="/tags/index.html">
                     
                     
                       
@@ -613,9 +617,29 @@
                     
                       
                     
-                    <span class="site-state-item-count">13</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
                     <span class="site-state-item-name">标签</span>
-                  
+                  </a>
                 </div>
               
             </nav>
@@ -672,7 +696,7 @@
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">Rice Chang</span>
+  <span class="author" itemprop="copyrightHolder">Sid Wu</span>
 
   
 

@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="一切活动都要经过成本-收益的检验。本篇文章记录了经济学学习的一点心得体会">
+<meta name="keywords" content="数据组织与分析,经济管理,博弈论">
+<meta property="og:type" content="article">
+<meta property="og:title" content="交易成本与科斯定理">
+<meta property="og:url" content="http://yoursite.name/2022/08/28/交易成本与科斯定理/index.html">
+<meta property="og:site_name" content="Sid Wu的小站">
+<meta property="og:description" content="一切活动都要经过成本-收益的检验。本篇文章记录了经济学学习的一点心得体会">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.name/pic/3.png">
+<meta property="og:image" content="http://yoursite.name/pic/4.png">
+<meta property="og:updated_time" content="2022-08-28T03:30:31.848Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="交易成本与科斯定理">
+<meta name="twitter:description" content="一切活动都要经过成本-收益的检验。本篇文章记录了经济学学习的一点心得体会">
+<meta name="twitter:image" content="http://yoursite.name/pic/3.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.name/2022/08/28/交易成本与科斯定理/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>交易成本与科斯定理 | Sid Wu的小站</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sid Wu的小站</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Where are you now?</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.name/2022/08/28/交易成本与科斯定理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sid Wu">
+      <meta itemprop="description" content="我们穿越长城">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sid Wu的小站">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">交易成本与科斯定理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2022-08-28 11:03:30 / 修改时间：11:30:31" itemprop="dateCreated datePublished" datetime="2022-08-28T11:03:30+08:00">2022-08-28</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong><em>一切活动都要经过成本-收益的检验。本篇文章记录了经济学学习的一点心得体会</em></strong><br><a id="more"></a></p>
+<h2 id="1-背景概述"><a href="#1-背景概述" class="headerlink" title="1 背景概述"></a>1 背景概述</h2><h3 id="1-1-何为“法和经济学”？"><a href="#1-1-何为“法和经济学”？" class="headerlink" title="1.1 何为“法和经济学”？"></a>1.1 何为“法和经济学”？</h3><p>法和经济学是新兴的交叉学科，即用经济方法分析一些法律问题，基于经济学原理制定和解释法律。而它最有趣的方面，在于试图将学习法律的理论，从理论中推导出的精确假设，与对假设的经验验证建立在一个科学的基础上。即建立在直觉、经验事实基础上的“习惯法”思维，向科学基础上的理性法律思维转变。</p>
+<h3 id="1-2研究意义"><a href="#1-2研究意义" class="headerlink" title="1.2研究意义"></a>1.2研究意义</h3><p>它利用经济学的原理解释法律或有关行政制度的形成，内在结构和法律落实的高效方式；同时，它也用法律去解释经济学现象、解决相关经济学问题。前者的实例比如量刑的问题：若抢劫判太重，那么或许减少犯案量，但只要是发生则罪犯必然会选择犯下重案；若判刑太轻，则犯罪成本低，造成社会治安严重下降.后者的实例在于，设立垄断法保护专利的年限过短，导致专利研发者不足以获得足够利润，无法达到鼓励研究的目的；而专利保护时间过长，导致完全的垄断，压制行业竞争，那么显而易见的是技术进步将更加困难。法和经济学致力于寻找这样的一个平衡以及形成这种平衡背后的可信原理。</p>
+<h3 id="1-3法律来源的经济学看法"><a href="#1-3法律来源的经济学看法" class="headerlink" title="1.3法律来源的经济学看法"></a>1.3法律来源的经济学看法</h3><p>社会与国家是如何形成的呢？很多哲学家给出了各自的判断。而比较有名的就是霍布斯的权利让渡说。他假设人的自然状态是趋利而又希望自我保护的，那么人遵循趋利保持战争状态，但者又违背自我保护的本性，这时就需要自然法生效（道德约束，不要去无理由伤害他人）。对于社会来说，可以用下表来假设表示互相斗争的情况情况。</p>
+<p><img src="/pic/3.png" alt><br>没有约束，暴力掠夺者反而获益最多。</p>
+<p><img src="/pic/4.png" alt><br>括号里面是（A利润，B利润，社会总利润）；类似囚徒博弈，必然导致无秩序和总利润最低；社会总财富没有增加，社会无法发展。<br>虽然面对同类相残的悲剧，但道德的约束力很弱，人们只能移交一部分本来有的权利（伤害别人的权利）到公共权利，以维护每个人的安全。这样的众多权利组成公共权利，意志组成公共意志，国家便诞生，法律就是它约束每个国民的标准。而它维护的无疑就是社会的有序发展。</p>
+<h2 id="2-法律和经济学的核心思想"><a href="#2-法律和经济学的核心思想" class="headerlink" title="2 法律和经济学的核心思想"></a>2 法律和经济学的核心思想</h2><h3 id="2-1-法律的核心思想——公平和正义"><a href="#2-1-法律的核心思想——公平和正义" class="headerlink" title="2.1 法律的核心思想——公平和正义"></a>2.1 法律的核心思想——公平和正义</h3><p>正义和公平是一对复杂具有极大正义的概念，是人类思想永恒的内容，涉及哲学、神学、法学等等方面。粗浅的说，“平”偏向客观，尽管有机会平等和结果平等之分，但终究是不要让差距过大到无可弥补；“义”偏向主观，是道德，是社会各方面都比较认可的美德。宗教用所谓“神圣命令理论”（道德来自上帝的命令）制定人间的规则，但陷入了游叙弗伦（柏拉图的一出戏剧）的两难困境——如果上帝高于道德而至高无上，任何行为都可能由于上帝命令而成为道德上正确的，哪怕我们不认为；反之道德高于上帝，那么很难看出为什么道德是源于上帝的。足以说明道德和其基础上的公平正义是世俗的，社会的。人制定的法律必定符合人的思想和受到人的限制。</p>
+<h3 id="2-2-经济学的核心思想——效率"><a href="#2-2-经济学的核心思想——效率" class="headerlink" title="2.2 经济学的核心思想——效率"></a>2.2 经济学的核心思想——效率</h3><p>鉴于人的欲望的无限性，就一项经济活动而言，最重要的事情当然就是最好地利用其有限的资源。这使我们不得不面对效率这个关键性的概念。在不会使其他人境况变坏的前提下，如果一项经济活动不再有可能增进任何人的经济福利，则该项经济活动就被认为是有效率的。对于法学，很多情况下，它的职能已经从惩恶（以牙还牙，以眼还眼）向增益转变。“效率”成为很重要的元素。某种意味上说，少赚就是亏。尽管“少赚就是亏”这句话这有些市侩，但举个例子，在法律中，哪怕超出规定多罚一元钱而承担不应当的损失，对被处罚的企业都是一种不公正。</p>
+<h2 id="3-所谓“交易成本”"><a href="#3-所谓“交易成本”" class="headerlink" title="3 所谓“交易成本”"></a>3 所谓“交易成本”</h2><p>交易成本这一概念贯穿了法和经济学的始终，从庇古的《福利经济学》假设交易成本为零，到科斯假定的交易成本更丰富的世界。前面所说，“如果交易成本为零，无论产权如何安排，个体之间的自由协商都会导致有效率的结果”让人不禁想起亚当斯密的“看不见的手”，那么<strong>“交易成本”就让这只“手”更具“理性”。</strong>而导致科斯定理诞生的论文就是要暴露庇古传统，即以完全竞争理论为基础的福利经济学所存在的问题。<br>比如，甲持有商品待售出价5000，乙希望购买出价3000。按照古典经济学的看法，如果他们完全理性，很可能会向一个帕累托收敛。古典微观经济学的逻辑如下：若僵持不下，甲的商品有折旧，乙的需求迟迟无法满足，他们一定会想方设法完成交易或者寻找下一名买卖家。一直这样下去，市场就充满了理性人。而科斯的交易成本理论动摇这一观点：在完全竞争理论范式下，个体理性的运用一方面似乎是完美无缺的，就像上帝在决策一样，因为它总是能够达到最优的福利状态（福利经济学）；但另一方面，似乎悖论的是，个体理性在这种情形下也是可有可无的，因为完全竞争的市场结构本身就可以保证最终的结果向帕累托最优收敛。因为古典微观经济学研究的是交易成本为零的世界<br>交易成本这个概念则为我们分析个体在各种具体场景中的行为提供了一个笼统的线索，展现个体的“理性”——在交易成本存在下对成本利益的比较。这种成本比较主观：比如可能两人有旧仇，那么他们达成交易的可能会减小；比如两人离婚，若有孩子可能当事人立场会更加摇摆。</p>
+<h2 id="4-科斯定理和在法律中的应用"><a href="#4-科斯定理和在法律中的应用" class="headerlink" title="4 科斯定理和在法律中的应用"></a>4 科斯定理和在法律中的应用</h2><p>在研究视野方面，科斯甚至认为法和经济学应当以经济学为中心，法律只是作为一种制度工具（更有甚者，认为可将整个法律体系作为经济学研究的一部分）。事实上，科斯本没有提出“科斯定理”，是后继的大量学者完善了理论的体系。有一个小例子可以形象表达科斯定理的一部分。</p>
+<h3 id="4-1模型"><a href="#4-1模型" class="headerlink" title="4.1模型"></a>4.1模型</h3><p>科斯假设以下场景：牧场主的草场和农场主的农地毗邻。牧场主的牛每年会带给农场主100美元的损失。为了避免这种损失，有A,B两种解决方案。A是农场主以每年50美元解决（比如自己做一个栅栏），B是牧场主每年75美元解决（比如牵走牛）。若按传统的法律视角，牧场主单方面给农场主带来了损失，理应由他全权负责赔偿，花费75美元。然而科斯从效率角度出发，提出要让土地的利用效率最大化。<br>若理性的个体用谈判解决问题，最终的解决很可能是这样的：牧场主付给农场主62.5美元每年（让他修筑栅栏）。这样，他们平均瓜分了25美元的合作剩余。或者干脆两个人结婚，让外部成本内部化，自行调整草牧行为。<br>但一旦对簿公堂，要求牧场主承担75美元每年的成本，他们都无法得到任何合作剩余。这说明权利的法律分配对可以进行合作的双方都是没有效率的。事实上，谈判不总是会成功的，科斯用”交易成本“描述这一交流受到的阻碍。明显，交易成本为0时，交易一定会成功。同时，无论产权在法律上如何安排，私人谈判（结婚也算谈判）都会导致资源的最优配置。然而，交易成本过大以至于阻碍了交易呢？那必须要以法律解决争端。这同样是符合效率的，因为法律尽管在权利的分配上没有效率，但却清空了潜在交易成本的损失。</p>
+<h3 id="4-2科斯定理的含义"><a href="#4-2科斯定理的含义" class="headerlink" title="4.2科斯定理的含义"></a>4.2科斯定理的含义</h3><p>根本上讲，科斯定理就是关于冲突权利如何配置的法学理论。它所提倡的思想即：<strong>在不存在交易成本（或者极小）的情况下，只要初始权利（产权）界定清晰，那么就可以通过谈判而实现资源有效率配置或得到社会产值最大化安排的结果。</strong>特别重要的是，必须知道损害方是否对引起的损害负责，因为没有这种权利的初始界定，就不存在权利的转让和重新组合的市场交易。但是，如果定价制度的运行毫无成本，最终的结果（产值最大化）是不受法律状况的影响的，即市场就会以交易的方式使私人成本与社会成本边际相等。它的基础是“有效性假设”和“不变性假设”。<br>或许提出一个反例：居民平白忍受尾气污染，面临“效益“的减损而无动于衷，尽管可能他并不开车。对此，科斯认为：个体与私人组织之所以不主动消除外部性的唯一理由是消除它们的收益会被消除它们的成本抵消。试想，若吸入尾气严重到直接致癌的话，居民们一定会采取有关手段请求仲裁的。</p>
+<h3 id="4-3科斯定理三个表述"><a href="#4-3科斯定理三个表述" class="headerlink" title="4.3科斯定理三个表述"></a>4.3科斯定理三个表述</h3><p>由于科斯定理具有很高的争议度，甚至很多拜读科斯大作后的学者由此提出了完全相反的结论，故我只截取了总结最简洁的版本。这个表述来自国际知名经济学家，新制度经济学和现代产权经济学的创始人之一的张五常：</p>
+<ol>
+<li>产权界定是市场交易的一个必需的前奏。</li>
+<li>有了明确的权利界定，在市场交易下的资产的使用会导致产生最高的资产价值。</li>
+<li>权利只要明确地界定为私产，不管产权谁属，交易费用不存在，市场就会以交易的方式使私人成本与社会成本边际相等。</li>
+</ol>
+<h3 id="4-4-科斯定理的意义"><a href="#4-4-科斯定理的意义" class="headerlink" title="4.4 科斯定理的意义"></a>4.4 科斯定理的意义</h3><p>一是提出了不同于庇古对待外部性的传统，指出了通过市场机制可以部分恢复交易效率的新思想，强调发挥市场对经济活动调节的基础性作用。<br>二是指出了产权清晰对于市场经济机制效率运行的重要性，以及产权科学界定、完善法律制度有助于提高市场运行的效率。<br>应用：国有企业的改革理念 污染的治理理念 公共资源的利用和交易</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据组织与分析/" rel="tag"># 数据组织与分析</a>
+          
+            <a href="/tags/经济管理/" rel="tag"># 经济管理</a>
+          
+            <a href="/tags/博弈论/" rel="tag"># 博弈论</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/08/28/法和经济学/" rel="next" title="法和经济学">
+                <i class="fa fa-chevron-left"></i> 法和经济学
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/08/28/weka数据分析练习/" rel="prev" title="weka数据分析练习">
+                weka数据分析练习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Sid Wu</p>
+              <p class="site-description motion-element" itemprop="description">我们穿越长城</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-背景概述"><span class="nav-number">1.</span> <span class="nav-text">1 背景概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-何为“法和经济学”？"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 何为“法和经济学”？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2研究意义"><span class="nav-number">1.2.</span> <span class="nav-text">1.2研究意义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3法律来源的经济学看法"><span class="nav-number">1.3.</span> <span class="nav-text">1.3法律来源的经济学看法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-法律和经济学的核心思想"><span class="nav-number">2.</span> <span class="nav-text">2 法律和经济学的核心思想</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-法律的核心思想——公平和正义"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 法律的核心思想——公平和正义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-经济学的核心思想——效率"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 经济学的核心思想——效率</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-所谓“交易成本”"><span class="nav-number">3.</span> <span class="nav-text">3 所谓“交易成本”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-科斯定理和在法律中的应用"><span class="nav-number">4.</span> <span class="nav-text">4 科斯定理和在法律中的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1模型"><span class="nav-number">4.1.</span> <span class="nav-text">4.1模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2科斯定理的含义"><span class="nav-number">4.2.</span> <span class="nav-text">4.2科斯定理的含义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3科斯定理三个表述"><span class="nav-number">4.3.</span> <span class="nav-text">4.3科斯定理三个表述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-科斯定理的意义"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 科斯定理的意义</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sid Wu</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
