@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/32x32-pandas.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/16x16-pandas.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.name","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文介绍了ES的基础操作，细节问题后续进行完善。">
+<meta name="keywords" content="cs,数据库,ELK,Elasticsearch,数据组织与分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Elasticsearch学习系列[1]-快速开始">
+<meta property="og:url" content="http://yoursite.name/2022/08/29/Elasticsearch学习系列-1-快速开始/index.html">
+<meta property="og:site_name" content="Sid Wu的小站">
+<meta property="og:description" content="本文介绍了ES的基础操作，细节问题后续进行完善。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2022-08-29T14:50:58.123Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Elasticsearch学习系列[1]-快速开始">
+<meta name="twitter:description" content="本文介绍了ES的基础操作，细节问题后续进行完善。">
+
+<link rel="canonical" href="http://yoursite.name/2022/08/29/Elasticsearch学习系列-1-快速开始/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Elasticsearch学习系列[1]-快速开始 | Sid Wu的小站</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Sid Wu的小站</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Where are you now?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.name/2022/08/29/Elasticsearch学习系列-1-快速开始/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Sid Wu">
+      <meta itemprop="description" content="我们穿越长城">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sid Wu的小站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Elasticsearch学习系列[1]-快速开始
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-29 22:43:38 / 修改时间：22:50:58" itemprop="dateCreated datePublished" datetime="2022-08-29T22:43:38+08:00">2022-08-29</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文介绍了ES的基础操作，细节问题后续进行完善。<br><a id="more"></a></p>
+<h2 id="1-三种基础概念index-type-document及快速入门"><a href="#1-三种基础概念index-type-document及快速入门" class="headerlink" title="1 三种基础概念index\type\document及快速入门"></a>1 三种基础概念index\type\document及快速入门</h2><p>index 可以对应table。<del>但姑且也就这么一对应，ES的检索具有路由rounting机制，因此举个例子，每个用户对应一个新的index都是可能的。假如关系数据库里面一个用户新增一个table，那属实有点疯狂。</del><br>不行，例子举得有点问题，当集群里面index或者shard过多时，也会让信息更新效率下降。</p>
+<p><del>type 可以对应 table</del> 7.0后，type废除了</p>
+<p>document 可以对应row</p>
+<p>以一个新增请求为例，如下格式：</p>
+<p><del>相当于movies就是index，movie就是type</del>7.0后，废除了</p>
+<p>以下是错误的写法了：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">PUT /movies/movie/5</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"title"</span>: <span class="string">"Kill Bill: Vol. 1"</span>,</span><br><span class="line">  <span class="attr">"director"</span>: <span class="string">"Quentin Tarantino"</span>,</span><br><span class="line">  <span class="attr">"year"</span>: <span class="number">2003</span>,</span><br><span class="line">  <span class="attr">"genres"</span>: [</span><br><span class="line">    <span class="string">"Action"</span>,</span><br><span class="line">    <span class="string">"Crime"</span>,</span><br><span class="line">    <span class="string">"Thriller"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>正确的写法，向index插入数据:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">PUT /movies/_doc/1</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"title"</span>: <span class="string">"The Godfather"</span>,</span><br><span class="line">  <span class="attr">"director"</span>: <span class="string">"Francis Ford Coppola"</span>,</span><br><span class="line">  <span class="attr">"year"</span>: <span class="number">1972</span>,</span><br><span class="line">  <span class="attr">"genres"</span>: [</span><br><span class="line">    <span class="string">"Crime"</span>,</span><br><span class="line">    <span class="string">"Drama"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PUT /movies/_doc/2</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"title"</span>: <span class="string">"Lawrence of Arabia"</span>,</span><br><span class="line">  <span class="attr">"director"</span>: <span class="string">"David Lean"</span>,</span><br><span class="line">  <span class="attr">"year"</span>: <span class="number">1962</span>,</span><br><span class="line">  <span class="attr">"genres"</span>: [</span><br><span class="line">    <span class="string">"Adventure"</span>,</span><br><span class="line">    <span class="string">"Biography"</span>,</span><br><span class="line">    <span class="string">"Drama"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PUT /movies/_doc/3</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"title"</span>: <span class="string">"To Kill a Mockingbird"</span>,</span><br><span class="line">  <span class="attr">"director"</span>: <span class="string">"Robert Mulligan"</span>,</span><br><span class="line">  <span class="attr">"year"</span>: <span class="number">1962</span>,</span><br><span class="line">  <span class="attr">"genres"</span>: [</span><br><span class="line">    <span class="string">"Crime"</span>,</span><br><span class="line">    <span class="string">"Drama"</span>,</span><br><span class="line">    <span class="string">"Mystery"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PUT /movies/_doc/4</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"title"</span>: <span class="string">"Apocalypse Now"</span>,</span><br><span class="line">  <span class="attr">"director"</span>: <span class="string">"Francis Ford Coppola"</span>,</span><br><span class="line">  <span class="attr">"year"</span>: <span class="number">1979</span>,</span><br><span class="line">  <span class="attr">"genres"</span>: [</span><br><span class="line">    <span class="string">"Drama"</span>,</span><br><span class="line">    <span class="string">"War"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PUT /movies/_doc/5</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"title"</span>: <span class="string">"Kill Bill: Vol. 1"</span>,</span><br><span class="line">  <span class="attr">"director"</span>: <span class="string">"Quentin Tarantino"</span>,</span><br><span class="line">  <span class="attr">"year"</span>: <span class="number">2003</span>,</span><br><span class="line">  <span class="attr">"genres"</span>: [</span><br><span class="line">    <span class="string">"Action"</span>,</span><br><span class="line">    <span class="string">"Crime"</span>,</span><br><span class="line">    <span class="string">"Thriller"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PUT /movies/_doc/6</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"title"</span>: <span class="string">"The Assassination of Jesse James by the Coward Robert Ford"</span>,</span><br><span class="line">  <span class="attr">"director"</span>: <span class="string">"Andrew Dominik"</span>,</span><br><span class="line">  <span class="attr">"year"</span>: <span class="number">2007</span>,</span><br><span class="line">  <span class="attr">"genres"</span>: [</span><br><span class="line">    <span class="string">"Biography"</span>,</span><br><span class="line">    <span class="string">"Crime"</span>,</span><br><span class="line">    <span class="string">"Drama"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PUT /movies/_doc/8</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"title"</span>: <span class="string">"最后的晚餐"</span>,</span><br><span class="line">  <span class="attr">"director"</span>: <span class="string">"新河"</span>,</span><br><span class="line">  <span class="attr">"year"</span>: <span class="number">2022</span>,</span><br><span class="line">  <span class="attr">"genres"</span>: [</span><br><span class="line">    <span class="string">"陈大中"</span>,</span><br><span class="line">    <span class="string">"李波涛"</span>,</span><br><span class="line">    <span class="string">"尼姆"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1-新建索引"><a href="#1-新建索引" class="headerlink" title="1 新建索引"></a>1 新建索引</h3><p><code>PUT movies</code> </p>
+<h3 id="2-检索新建的数据"><a href="#2-检索新建的数据" class="headerlink" title="2 检索新建的数据"></a>2 检索新建的数据</h3><p><code>GET /movies/_doc/1</code></p>
+<p>查询id为1的doc</p>
+<p><code>GET /movies/_search</code></p>
+<h3 id="3-查询index下符合要求所有文档"><a href="#3-查询index下符合要求所有文档" class="headerlink" title="3 查询index下符合要求所有文档"></a>3 查询index下符合要求所有文档</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GET /movies/_search</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"query"</span>: &#123;</span><br><span class="line">    <span class="attr">"query_string"</span>: &#123;</span><br><span class="line">      <span class="attr">"query"</span>: <span class="string">"crime"</span>,</span><br><span class="line">      <span class="attr">"fields"</span>: [</span><br><span class="line">        <span class="string">"genres"</span></span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4-查询某一字段含有文本的值，且按照其他字段过滤"><a href="#4-查询某一字段含有文本的值，且按照其他字段过滤" class="headerlink" title="4 查询某一字段含有文本的值，且按照其他字段过滤"></a>4 查询某一字段含有文本的值，且按照其他字段过滤</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">GET /movies/_search</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"query"</span>: &#123;</span><br><span class="line">        <span class="attr">"bool"</span>: &#123;</span><br><span class="line">            <span class="attr">"must"</span>: &#123;</span><br><span class="line">                <span class="attr">"query_string"</span>: &#123;</span><br><span class="line">                    <span class="attr">"query"</span>: <span class="string">"crime"</span>,</span><br><span class="line">                    <span class="attr">"fields"</span>: [</span><br><span class="line">                        <span class="string">"genres"</span></span><br><span class="line">                    ]</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"filter"</span>: &#123;</span><br><span class="line">                <span class="attr">"term"</span>: &#123;</span><br><span class="line">                    <span class="attr">"year"</span>: <span class="number">2007</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="5-字符串的初步认识"><a href="#5-字符串的初步认识" class="headerlink" title="5 字符串的初步认识"></a>5 字符串的初步认识</h3><p>ES中字符串分为<strong>Text、keyword</strong>两类<br>text：会分词，然后进行索引；支持模糊、精确查询；不支持聚合<br>keyword：不进行分词，直接索引；支持模糊、精确查询；支持聚合<br>而ES5.0后，ElasticSearch字符串将默认被同时映射成text<strong>和</strong>keyword类型，将会自动创建下面的动态映射(dynamic mappings):<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"foo"</span>: &#123;</span><br><span class="line">        <span class="attr">"type"</span>: <span class="string">"text"</span>,</span><br><span class="line">        <span class="attr">"fields"</span>: &#123;</span><br><span class="line">            <span class="attr">"keyword"</span>: &#123;</span><br><span class="line">                <span class="attr">"type"</span>: <span class="string">"keyword"</span>,</span><br><span class="line">                <span class="attr">"ignore_above"</span>: <span class="number">256</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>match 全文检索匹配。可以认为，搜索词也进行分词了。例如，<br><code>{&quot;match&quot;: {&quot;gender&quot;: &quot;小米&quot;}}</code><br>命中了包含【小】和【米】关键词的结果<br>match_phrase 完全匹配，不进行分词。</p>
+<h2 id="2-win10下使用cmd上的curl命令"><a href="#2-win10下使用cmd上的curl命令" class="headerlink" title="2 win10下使用cmd上的curl命令"></a>2 win10下使用cmd上的curl命令</h2><p>！注意：不要使用powershell！</p>
+<p>！注意：不要使用powershell！</p>
+<p>！注意：不要使用powershell！</p>
+<ol>
+<li>注意有了ssl认证、身份认证</li>
+</ol>
+<p><code>curl -k -i -XGET &quot;https://localhost:9200&quot; --user elastic:{password}</code></p>
+<ol start="2">
+<li><p>由于ES增加了安全机制，所以需要加请求头</p>
+</li>
+<li><p>JSON内容注意改成三个引号</p>
+</li>
+</ol>
+<p><code>curl -k -H &quot;Content-Type: application/json&quot; -XGET https://localhost:9200/_count?pretty=true  -d &quot;{&quot;&quot;&quot;query&quot;&quot;&quot;: {&quot;&quot;&quot;match_all&quot;&quot;&quot;: {}}}&quot; --user elastic:{password}</code></p>
+<h2 id="3-kibana设置中文"><a href="#3-kibana设置中文" class="headerlink" title="3 kibana设置中文"></a>3 kibana设置中文</h2><p>（但还是别设置吧，看起来真的费劲，译名根本不统一）</p>
+<p>找到kibaana下的kibana.yml，末尾添加</p>
+<blockquote>
+<p>i18n.locale: “zh-CN”</p>
+</blockquote>
+<p>如果已启动，需要重启kibana服务，重新加载配置也需要时间。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/cs/" rel="tag"># cs</a>
+              <a href="/tags/数据库/" rel="tag"># 数据库</a>
+              <a href="/tags/ELK/" rel="tag"># ELK</a>
+              <a href="/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
+              <a href="/tags/数据组织与分析/" rel="tag"># 数据组织与分析</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/08/28/Oracle的定时任务/" rel="prev" title="Oracle的定时任务">
+      <i class="fa fa-chevron-left"></i> Oracle的定时任务
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/08/29/Elasticsearch学习系列-0-说明/" rel="next" title="Elasticsearch学习系列[0]-说明">
+      Elasticsearch学习系列[0]-说明 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-三种基础概念index-type-document及快速入门"><span class="nav-text">1 三种基础概念index\type\document及快速入门</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-新建索引"><span class="nav-text">1 新建索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-检索新建的数据"><span class="nav-text">2 检索新建的数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-查询index下符合要求所有文档"><span class="nav-text">3 查询index下符合要求所有文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-查询某一字段含有文本的值，且按照其他字段过滤"><span class="nav-text">4 查询某一字段含有文本的值，且按照其他字段过滤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-字符串的初步认识"><span class="nav-text">5 字符串的初步认识</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-win10下使用cmd上的curl命令"><span class="nav-text">2 win10下使用cmd上的curl命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-kibana设置中文"><span class="nav-text">3 kibana设置中文</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Sid Wu</p>
+  <div class="site-description" itemprop="description">我们穿越长城</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sid Wu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
