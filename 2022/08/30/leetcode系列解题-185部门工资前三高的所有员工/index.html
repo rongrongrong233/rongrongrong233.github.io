@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/32x32-pandas.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/16x16-pandas.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.name","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="这道题算是力扣上困难等级里面充数的一题，难度很低。不过sql没必要过于困难和复杂，毕竟只作为一种查询语言使用。记录解题代码，学习心得体会。可能不是最高效的，但是是自己写出来的">
+<meta name="keywords" content="数据库,Oracle,Leetcode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode系列解题-185部门工资前三高的所有员工">
+<meta property="og:url" content="http://yoursite.name/2022/08/30/leetcode系列解题-185部门工资前三高的所有员工/index.html">
+<meta property="og:site_name" content="Sid Wu的小站">
+<meta property="og:description" content="这道题算是力扣上困难等级里面充数的一题，难度很低。不过sql没必要过于困难和复杂，毕竟只作为一种查询语言使用。记录解题代码，学习心得体会。可能不是最高效的，但是是自己写出来的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2022-08-30T14:58:00.177Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="leetcode系列解题-185部门工资前三高的所有员工">
+<meta name="twitter:description" content="这道题算是力扣上困难等级里面充数的一题，难度很低。不过sql没必要过于困难和复杂，毕竟只作为一种查询语言使用。记录解题代码，学习心得体会。可能不是最高效的，但是是自己写出来的">
+
+<link rel="canonical" href="http://yoursite.name/2022/08/30/leetcode系列解题-185部门工资前三高的所有员工/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>leetcode系列解题-185部门工资前三高的所有员工 | Sid Wu的小站</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Sid Wu的小站</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Where are you now?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.name/2022/08/30/leetcode系列解题-185部门工资前三高的所有员工/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Sid Wu">
+      <meta itemprop="description" content="我们穿越长城">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sid Wu的小站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          leetcode系列解题-185部门工资前三高的所有员工
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-30 22:52:25 / 修改时间：22:58:00" itemprop="dateCreated datePublished" datetime="2022-08-30T22:52:25+08:00">2022-08-30</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这道题算是力扣上困难等级里面充数的一题，难度很低。不过sql没必要过于困难和复杂，毕竟只作为一种查询语言使用。<br><em>记录解题代码，学习心得体会。可能不是最高效的，但是是自己写出来的</em><br><a id="more"></a></p>
+<h2 id="题目背景"><a href="#题目背景" class="headerlink" title="题目背景"></a>题目背景</h2><p>表: Employee</p>
+<p>+————–+———+<br>| Column Name  | Type    |<br>+————–+———+<br>| id           | int     |<br>| name         | varchar |<br>| salary       | int     |<br>| departmentId | int     |<br>+————–+———+<br>Id是该表的主键列。<br>departmentId是Department表中ID的外键。<br>该表的每一行都表示员工的ID、姓名和工资。它还包含了他们部门的ID。</p>
+<p>表: Department</p>
+<p>+————-+———+<br>| Column Name | Type    |<br>+————-+———+<br>| id          | int     |<br>| name        | varchar |<br>+————-+———+<br>Id是该表的主键列。<br>该表的每一行表示部门ID和部门名。</p>
+<p>公司的主管们感兴趣的是公司每个部门中谁赚的钱最多。一个部门的 高收入者 是指一个员工的工资在该部门的 不同 工资中 排名前三 。</p>
+<p>编写一个SQL查询，找出每个部门中 收入高的员工 。</p>
+<p>以 任意顺序 返回结果表。</p>
+<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode.cn/problems/department-top-three-salaries" target="_blank" rel="noopener">https://leetcode.cn/problems/department-top-three-salaries</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> B.name <span class="keyword">as</span> Department ,A.Name <span class="keyword">as</span> Employee, A.Salary</span><br><span class="line"><span class="keyword">from</span> Employee A <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> Department B</span><br><span class="line"><span class="keyword">ON</span> A.departmentId = B.id</span><br><span class="line"><span class="keyword">where</span> A.id <span class="keyword">in</span>(</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">id</span> <span class="keyword">from</span></span><br><span class="line">(<span class="keyword">SELECT</span> <span class="keyword">id</span>, <span class="keyword">dense_rank</span>() <span class="keyword">OVER</span></span><br><span class="line">(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> departmentId <span class="keyword">ORDER</span> <span class="keyword">BY</span> salary <span class="keyword">DESC</span>) <span class="keyword">AS</span> group_idx</span><br><span class="line"><span class="keyword">FROM</span> Employee) filter_tbl</span><br><span class="line"><span class="keyword">where</span> filter_tbl.group_idx &lt;<span class="number">4</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="评论"><a href="#评论" class="headerlink" title="评论"></a>评论</h2><p>基础的sql中窗口函数的应用</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/数据库/" rel="tag"># 数据库</a>
+              <a href="/tags/Oracle/" rel="tag"># Oracle</a>
+              <a href="/tags/Leetcode/" rel="tag"># Leetcode</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/08/30/金融指标分析计划/" rel="prev" title="金融指标分析计划">
+      <i class="fa fa-chevron-left"></i> 金融指标分析计划
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/08/30/leetcode系列解题-176第二高的薪水/" rel="next" title="leetcode系列解题-176第二高的薪水">
+      leetcode系列解题-176第二高的薪水 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目背景"><span class="nav-text">题目背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#评论"><span class="nav-text">评论</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Sid Wu</p>
+  <div class="site-description" itemprop="description">我们穿越长城</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sid Wu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

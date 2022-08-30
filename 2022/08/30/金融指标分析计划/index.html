@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/32x32-pandas.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/16x16-pandas.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.name","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="介绍金融数据分析项目的思路、使用技术工具。">
+<meta name="keywords" content="数据库,ELK,数据组织与分析,Python,Elasticsearc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="金融指标分析计划">
+<meta property="og:url" content="http://yoursite.name/2022/08/30/金融指标分析计划/index.html">
+<meta property="og:site_name" content="Sid Wu的小站">
+<meta property="og:description" content="介绍金融数据分析项目的思路、使用技术工具。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2022-08-30T09:00:09.836Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="金融指标分析计划">
+<meta name="twitter:description" content="介绍金融数据分析项目的思路、使用技术工具。">
+
+<link rel="canonical" href="http://yoursite.name/2022/08/30/金融指标分析计划/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>金融指标分析计划 | Sid Wu的小站</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Sid Wu的小站</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Where are you now?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.name/2022/08/30/金融指标分析计划/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Sid Wu">
+      <meta itemprop="description" content="我们穿越长城">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sid Wu的小站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          金融指标分析计划
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-30 12:15:30 / 修改时间：17:00:09" itemprop="dateCreated datePublished" datetime="2022-08-30T12:15:30+08:00">2022-08-30</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>介绍金融数据分析项目的思路、使用技术工具。<br><a id="more"></a></p>
+<h2 id="金融数据分析"><a href="#金融数据分析" class="headerlink" title="金融数据分析"></a>金融数据分析</h2><h3 id="文章结构"><a href="#文章结构" class="headerlink" title="文章结构"></a>文章结构</h3><p><code>目标</code>节介绍整个<strong>金融数据分析</strong>项目的短期、长期目标<br><code>技术栈说明</code>节介绍了使用到的技术，简要记录了开发计划和预计难点<br><code>指标</code>节是<strong>核心</strong>部分，记录了需要统计、获取的数据资源、指标<br><code>指标分析优先度排序</code>节是对<code>指标</code>节的具体实施</p>
+<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><ol>
+<li>使用kibana可视化工具，得到可视化结果</li>
+<li>能得到一定的，有价值的信息，可以指导现实</li>
+<li>发布在云服务器上，可供外部查看</li>
+<li>使用宏观、微观视角，生成周报、月报</li>
+</ol>
+<h3 id="技术栈说明"><a href="#技术栈说明" class="headerlink" title="技术栈说明"></a>技术栈说明</h3><p>为达成目标，整体概况如下：</p>
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>使用工具</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据提取</td>
+<td>Python</td>
+<td>灵活的语言，提供各类好用的开源第三方模块</td>
+</tr>
+<tr>
+<td>—</td>
+<td>Akshare</td>
+<td>封装各类公开数据源</td>
+</tr>
+<tr>
+<td>—</td>
+<td>Pandas</td>
+<td>对获取到的数据源进行简单处理</td>
+</tr>
+<tr>
+<td>数据转换</td>
+<td>Logstash</td>
+<td>ELK套件中的部分。对初始数据源进行处理，导入ElasticSearch中</td>
+</tr>
+<tr>
+<td>数据加载</td>
+<td>ElasticSearch</td>
+<td>改造于lucene的数据搜索平台，相对于关系型数据库，更可以适应非关系型数据。选择它的目的是使用广泛，资料较多，可以进行参考</td>
+</tr>
+<tr>
+<td>—</td>
+<td>Kibana</td>
+<td>ELK套件中的部分，做数据展现很简易，方便。图表也能嵌入其他地方</td>
+</tr>
+<tr>
+<td>其他</td>
+<td>Hexo</td>
+<td>个人博客，相对于搭建动态前端页面，静态网页搭建更简单，足够满足需要</td>
+</tr>
+<tr>
+<td>—</td>
+<td>nginx</td>
+<td>域名没有处理好，主要做云服务器端口的转发。</td>
+</tr>
+<tr>
+<td>—</td>
+<td>flask</td>
+<td>python web的轻量框架。虽然相比Django少了很多内容，但我只需要使用其路由功能</td>
+</tr>
+</tbody>
+</table>
+<p>按照ETL的顺序进行核心数据的实施。</p>
+<h4 id="Extract提取"><a href="#Extract提取" class="headerlink" title="Extract提取"></a>Extract提取</h4><p>使用<code>Python</code>，借助开源数据工具<code>Akshare</code>获取公开数据，根据数据接口的不同，进行数据同步。在获取数据的环节进行数据初步清洗和下载。<br>根据数据接口不同，一般有两类数据：</p>
+<ul>
+<li>全量数据</li>
+<li>增量数据<br>输出结果为各金融指标的<code>.csv</code>数据文件。</li>
+</ul>
+<h4 id="Transform转换"><a href="#Transform转换" class="headerlink" title="Transform转换"></a>Transform转换</h4><p>使用<code>ELK</code>套件中的<code>logstash</code>，自动监控各数据文件的变化。<br>使用<code>pipeline</code>中配置input、filter、output来进行数据的清洗转换。</p>
+<h4 id="Load加载"><a href="#Load加载" class="headerlink" title="Load加载"></a>Load加载</h4><p>经过<code>logstash</code>处理过的数据导入<code>ElasticSearch</code>内，使用<code>Kibana</code>工具中的<code>Discover</code>、<code>Dashboard</code>做数据的展现。</p>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><ol>
+<li>运维<br>数据自动收集，处理过程中不可能完全顺利，需要对整个流程基于日志进行管理，以保证数据的准确、实时。主要收集以下两方面的日志：</li>
+</ol>
+<ul>
+<li>Python获取数据的日志</li>
+<li>ELK各组件的日志<br>同样，获取日志文件后，加载到Kibana中形成Dashboard。</li>
+</ul>
+<h3 id="指标"><a href="#指标" class="headerlink" title="指标"></a>指标</h3><ol>
+<li>货币指标</li>
+</ol>
+<ul>
+<li style="list-style: none"><input type="checkbox"> 主要央行货币利率<a href="https://www.akshare.xyz/data/interest_rate/interest_rate.html" target="_blank" rel="noopener">https://www.akshare.xyz/data/interest_rate/interest_rate.html</a></li>
+<li style="list-style: none"><input type="checkbox"> 主要货币兑美元报价数据 参考<a href="https://www.akshare.xyz/data/currency/currency.html" target="_blank" rel="noopener">https://www.akshare.xyz/data/currency/currency.html</a></li>
+<li style="list-style: none"><input type="checkbox" checked> 外汇储备(亿美元) 参考<a href="https://www.akshare.xyz/data/macro/macro.html#id20" target="_blank" rel="noopener">https://www.akshare.xyz/data/macro/macro.html#id20</a></li>
+<li style="list-style: none"><input type="checkbox"> M2货币供应年率 参考<a href="https://www.akshare.xyz/data/macro/macro.html?highlight=M2#m2" target="_blank" rel="noopener">https://www.akshare.xyz/data/macro/macro.html?highlight=M2#m2</a></li>
+<li style="list-style: none"><input type="checkbox"> 存款准备金率 参考<a href="https://www.akshare.xyz/data/macro/macro.html#id20" target="_blank" rel="noopener">https://www.akshare.xyz/data/macro/macro.html#id20</a></li>
+<li style="list-style: none"><input type="checkbox"> 央行公开市场操作 参考<a href="https://www.akshare.xyz/data/macro/macro.html#id20" target="_blank" rel="noopener">https://www.akshare.xyz/data/macro/macro.html#id20</a></li>
+<li style="list-style: none"><input type="checkbox"> 银行间拆借利率 参考<a href="https://www.akshare.xyz/data/interest_rate/interest_rate.html" target="_blank" rel="noopener">https://www.akshare.xyz/data/interest_rate/interest_rate.html</a></li>
+</ul>
+<ol start="2">
+<li>债券指标</li>
+</ol>
+<ul>
+<li style="list-style: none"><input type="checkbox"> 债券现券市场概览 参考<a href="https://www.akshare.xyz/data/bond/bond.html" target="_blank" rel="noopener">https://www.akshare.xyz/data/bond/bond.html</a></li>
+<li style="list-style: none"><input type="checkbox" checked> 中/美国国债收益率 参考<a href="https://www.akshare.xyz/data/bond/bond.html#id35" target="_blank" rel="noopener">https://www.akshare.xyz/data/bond/bond.html#id35</a> </li>
+</ul>
+<ol start="3">
+<li>能源、实物指标<br>燃气、石油、电力、海运价格</li>
+</ol>
+<ul>
+<li style="list-style: none"><input type="checkbox" checked> <del>WTI\布伦特原油 参考<a href="https://www.akshare.xyz/data/futures/futures.html#id52" target="_blank" rel="noopener">https://www.akshare.xyz/data/futures/futures.html#id52</a></del> 需要代理，以后再说</li>
+<li style="list-style: none"><input type="checkbox" checked> WTI\布伦特原油 参考<a href="https://www.akshare.xyz/data/futures/futures.html?highlight=https%3A%2F%2Ffinance.sina.com.cn%2Ffuturemarket%2F#id50" target="_blank" rel="noopener">https://www.akshare.xyz/data/futures/futures.html?highlight=https%3A%2F%2Ffinance.sina.com.cn%2Ffuturemarket%2F#id50</a></li>
+<li style="list-style: none"><input type="checkbox"> 上海黄金交易所报告 参考<a href="https://www.akshare.xyz/data/macro/macro.html#id20" target="_blank" rel="noopener">https://www.akshare.xyz/data/macro/macro.html#id20</a></li>
+</ul>
+<ol start="4">
+<li>股票指标</li>
+</ol>
+<ul>
+<li style="list-style: none"><input type="checkbox"> wind中证全指</li>
+<li style="list-style: none"><input type="checkbox"> 上海融资融券报告 参考<a href="https://www.akshare.xyz/data/macro/macro.html#id20" target="_blank" rel="noopener">https://www.akshare.xyz/data/macro/macro.html#id20</a></li>
+<li style="list-style: none"><input type="checkbox"> 新发公募基金、新发公募基金历史规模 参考<a href="https://www.akshare.xyz/data/fund/fund_public.html#id39" target="_blank" rel="noopener">https://www.akshare.xyz/data/fund/fund_public.html#id39</a></li>
+<li style="list-style: none"><input type="checkbox"> 富时A50 参考<a href="https://www.akshare.xyz/data/index/index.html?highlight=A50#id20" target="_blank" rel="noopener">https://www.akshare.xyz/data/index/index.html?highlight=A50#id20</a></li>
+</ul>
+<ol start="5">
+<li>期权期指期货</li>
+</ol>
+<ul>
+<li style="list-style: none"><input type="checkbox"> <del>波动率</del></li>
+<li style="list-style: none"><input type="checkbox"> 恐慌指数<br>VIX全名是芝加哥期权交易所波动率指数（Chicago Board Options Exchange Volatility Index），用以反映S&amp;P 500指数期货的波动程度，测量未来30天市场预期的波动程度，通常用来评估未来风险，因此它被称作“恐慌指数”。<br>参考<a href="https://www.akshare.xyz/data/index/index.html?highlight=VIX#id46" target="_blank" rel="noopener">https://www.akshare.xyz/data/index/index.html?highlight=VIX#id46</a></li>
+</ul>
+<ol start="6">
+<li>其他</li>
+</ol>
+<ul>
+<li style="list-style: none"><input type="checkbox"> 金价、银价</li>
+<li style="list-style: none"><input type="checkbox"> 物价指数<ul>
+<li style="list-style: none"><input type="checkbox"> 菜篮子产品批发价格指数 参考<a href="https://www.akshare.xyz/data/macro/macro.html#id20" target="_blank" rel="noopener">https://www.akshare.xyz/data/macro/macro.html#id20</a></li>
+<li style="list-style: none"><input type="checkbox"> 居民消费价格指数（CPI）参考<a href="https://www.akshare.xyz/data/macro/macro.html#id20" target="_blank" rel="noopener">https://www.akshare.xyz/data/macro/macro.html#id20</a></li>
+</ul>
+</li>
+<li style="list-style: none"><input type="checkbox"> 加密货币</li>
+<li style="list-style: none"><input type="checkbox"> 矿机停电价</li>
+<li style="list-style: none"><input type="checkbox"> 中国PMI指数 参考<a href="https://www.akshare.xyz/data/macro/macro.html#id20" target="_blank" rel="noopener">https://www.akshare.xyz/data/macro/macro.html#id20</a></li>
+<li style="list-style: none"><input type="checkbox"> 中国GDP年率 参考<a href="https://www.akshare.xyz/data/macro/macro.html#id20" target="_blank" rel="noopener">https://www.akshare.xyz/data/macro/macro.html#id20</a></li>
+<li style="list-style: none"><input type="checkbox"> 中国税收收入、财政收入 参考<a href="https://www.akshare.xyz/data/macro/macro.html#id20" target="_blank" rel="noopener">https://www.akshare.xyz/data/macro/macro.html#id20</a> 注意数据源已换，以package为准</li>
+</ul>
+<ol start="7">
+<li>实时消息<br>参考<a href="https://www.akshare.xyz/data/ws/ws.html#id1" target="_blank" rel="noopener">https://www.akshare.xyz/data/ws/ws.html#id1</a></li>
+<li>搜索指数<br>参考<a href="https://www.akshare.xyz/data/index/index.html#id20" target="_blank" rel="noopener">https://www.akshare.xyz/data/index/index.html#id20</a></li>
+</ol>
+<h3 id="指标分析优先度排序"><a href="#指标分析优先度排序" class="headerlink" title="指标分析优先度排序"></a>指标分析优先度排序</h3><table>
+<thead>
+<tr>
+<th>优先梯度</th>
+<th>时间周期</th>
+<th>名称</th>
+<th>具体图表</th>
+<th>链接</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>每日刷新</td>
+<td>中/美国国债收益率</td>
+<td>table：每日的两者收益率、发布时间、与上一日对比</td>
+<td><a href="https://www.akshare.xyz/data/bond/bond.html#id35" target="_blank" rel="noopener">https://www.akshare.xyz/data/bond/bond.html#id35</a></td>
+</tr>
+<tr>
+<td>A</td>
+<td>每日刷新</td>
+<td>中/美国国债收益率</td>
+<td>table：近30日收益率走势</td>
+<td><a href="https://www.akshare.xyz/data/bond/bond.html#id35" target="_blank" rel="noopener">https://www.akshare.xyz/data/bond/bond.html#id35</a></td>
+</tr>
+<tr>
+<td>A</td>
+<td>每日刷新</td>
+<td>中/美国国债收益率</td>
+<td>table：近3个月收益率走势</td>
+<td><a href="https://www.akshare.xyz/data/bond/bond.html#id35" target="_blank" rel="noopener">https://www.akshare.xyz/data/bond/bond.html#id35</a></td>
+</tr>
+<tr>
+<td>A</td>
+<td>每日刷新</td>
+<td>WTI\布伦特原油</td>
+<td>table：WTI\布伦特原油上一交易日收盘价格、涨跌幅、日期</td>
+<td><a href="https://www.akshare.xyz/data/futures/futures.html?highlight=https%3A%2F%2Ffinance.sina.com.cn%2Ffuturemarket%2F#id50" target="_blank" rel="noopener">https://www.akshare.xyz/data/futures/futures.html?highlight=https%3A%2F%2Ffinance.sina.com.cn%2Ffuturemarket%2F#id50</a></td>
+</tr>
+<tr>
+<td>A</td>
+<td>每日刷新</td>
+<td>WTI\布伦特原油</td>
+<td>折线图：WTI\布伦特原油五交易日以来收盘价格、日期为横坐标</td>
+<td><a href="https://www.akshare.xyz/data/futures/futures.html?highlight=https%3A%2F%2Ffinance.sina.com.cn%2Ffuturemarket%2F#id50" target="_blank" rel="noopener">https://www.akshare.xyz/data/futures/futures.html?highlight=https%3A%2F%2Ffinance.sina.com.cn%2Ffuturemarket%2F#id50</a></td>
+</tr>
+<tr>
+<td>A</td>
+<td>每月刷新</td>
+<td>WTI\布伦特原油</td>
+<td>折线图：WTI\布伦特原油3个月以来收盘价格、日期为横坐标</td>
+<td><a href="https://www.akshare.xyz/data/futures/futures.html?highlight=https%3A%2F%2Ffinance.sina.com.cn%2Ffuturemarket%2F#id50" target="_blank" rel="noopener">https://www.akshare.xyz/data/futures/futures.html?highlight=https%3A%2F%2Ffinance.sina.com.cn%2Ffuturemarket%2F#id50</a></td>
+</tr>
+<tr>
+<td>A</td>
+<td>每月刷新</td>
+<td>WTI\布伦特原油</td>
+<td>折线图：WTI\布伦特原油12个月以来收盘价格、日期为横坐标</td>
+<td><a href="https://www.akshare.xyz/data/futures/futures.html?highlight=https%3A%2F%2Ffinance.sina.com.cn%2Ffuturemarket%2F#id50" target="_blank" rel="noopener">https://www.akshare.xyz/data/futures/futures.html?highlight=https%3A%2F%2Ffinance.sina.com.cn%2Ffuturemarket%2F#id50</a></td>
+</tr>
+</tbody>
+</table>
+<p>| B | 每月刷新 | 中国外汇储备 | 12个月来外汇储备今值(亿美元)、预测值(亿美元)、前值(亿美元)，构建表格和折线图 |— |<br>| B | 每月刷新 | 中国外汇储备 | 12个月来外汇储备今值(亿美元)、预测值(亿美元)、前值(亿美元)，构建表格和折线图 |— |<br>| B | 每日刷新 | A股、美、日、英、港股概况 | table：上一交易日收盘点数、涨跌幅、日期、指数名称 |— |<br>| B | 每日刷新 | A股、美、日、英、港股五日概况 | 折线图：五交易日以来收盘点数、涨跌幅、日期为横坐标|— |<br>| B | 每月刷新 | A股、美、日、英、港股三月概况 | 折线图：三个月来收盘点数、涨跌幅、日期。|— |</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/数据库/" rel="tag"># 数据库</a>
+              <a href="/tags/ELK/" rel="tag"># ELK</a>
+              <a href="/tags/数据组织与分析/" rel="tag"># 数据组织与分析</a>
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Elasticsearc/" rel="tag"># Elasticsearc</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/08/29/Elasticsearch学习系列-5-一些小细节/" rel="prev" title="Elasticsearch学习系列[5]-一些小细节">
+      <i class="fa fa-chevron-left"></i> Elasticsearch学习系列[5]-一些小细节
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/08/30/leetcode系列解题-185部门工资前三高的所有员工/" rel="next" title="leetcode系列解题-185部门工资前三高的所有员工">
+      leetcode系列解题-185部门工资前三高的所有员工 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#金融数据分析"><span class="nav-text">金融数据分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文章结构"><span class="nav-text">文章结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目标"><span class="nav-text">目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#技术栈说明"><span class="nav-text">技术栈说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Extract提取"><span class="nav-text">Extract提取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Transform转换"><span class="nav-text">Transform转换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Load加载"><span class="nav-text">Load加载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他"><span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指标"><span class="nav-text">指标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指标分析优先度排序"><span class="nav-text">指标分析优先度排序</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Sid Wu</p>
+  <div class="site-description" itemprop="description">我们穿越长城</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sid Wu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
