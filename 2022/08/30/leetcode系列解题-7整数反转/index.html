@@ -20,18 +20,18 @@
     var CONFIG = {"hostname":"yoursite.name","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="这个题虽然通过率不高，但也不难。不过我第一次意识到abs函数居然还有上下限问题，指的记录。以后使用math模块都要注意输入值的上下限。记录解题代码，学习心得体会。可能不是最高效的，但是是自己写出来的">
+  <meta name="description" content="这个题虽然通过率不高，但也不难。不过我第一次意识到abs函数居然还有上下限问题，值得记录。以后使用math模块都要注意输入值的上下限。记录解题代码，学习心得体会。可能不是最高效的，但是是自己写出来的">
 <meta name="keywords" content="Leetcode,Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="leetcode系列解题-7整数反转">
 <meta property="og:url" content="http://yoursite.name/2022/08/30/leetcode系列解题-7整数反转/index.html">
 <meta property="og:site_name" content="Sid Wu的小站">
-<meta property="og:description" content="这个题虽然通过率不高，但也不难。不过我第一次意识到abs函数居然还有上下限问题，指的记录。以后使用math模块都要注意输入值的上下限。记录解题代码，学习心得体会。可能不是最高效的，但是是自己写出来的">
+<meta property="og:description" content="这个题虽然通过率不高，但也不难。不过我第一次意识到abs函数居然还有上下限问题，值得记录。以后使用math模块都要注意输入值的上下限。记录解题代码，学习心得体会。可能不是最高效的，但是是自己写出来的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2022-08-30T15:26:56.716Z">
+<meta property="og:updated_time" content="2022-08-31T01:29:54.421Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="leetcode系列解题-7整数反转">
-<meta name="twitter:description" content="这个题虽然通过率不高，但也不难。不过我第一次意识到abs函数居然还有上下限问题，指的记录。以后使用math模块都要注意输入值的上下限。记录解题代码，学习心得体会。可能不是最高效的，但是是自己写出来的">
+<meta name="twitter:description" content="这个题虽然通过率不高，但也不难。不过我第一次意识到abs函数居然还有上下限问题，值得记录。以后使用math模块都要注意输入值的上下限。记录解题代码，学习心得体会。可能不是最高效的，但是是自己写出来的">
 
 <link rel="canonical" href="http://yoursite.name/2022/08/30/leetcode系列解题-7整数反转/">
 
@@ -100,7 +100,7 @@
       <h1 class="site-title">Sid Wu的小站</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
-      <p class="site-subtitle" itemprop="description">Where are you now?</p>
+      <p class="site-subtitle" itemprop="description">点击「主页」查看文章列表，点击「标签」查看已有文章分类</p>
   </div>
 
   <div class="site-nav-right">
@@ -176,10 +176,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-08-30 23:13:43 / 修改时间：23:26:56" itemprop="dateCreated datePublished" datetime="2022-08-30T23:13:43+08:00">2022-08-30</time>
+              <time title="创建时间：2022-08-30 23:13:43" itemprop="dateCreated datePublished" datetime="2022-08-30T23:13:43+08:00">2022-08-30</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-31 09:29:54" itemprop="dateModified" datetime="2022-08-31T09:29:54+08:00">2022-08-31</time>
+              </span>
 
           
 
@@ -192,7 +198,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>这个题虽然通过率不高，但也不难。不过我第一次意识到abs函数居然还有上下限问题，指的记录。以后使用math模块都要注意输入值的上下限。<br><em>记录解题代码，学习心得体会。可能不是最高效的，但是是自己写出来的</em><br><a id="more"></a></p>
+        <p>这个题虽然通过率不高，但也不难。不过我第一次意识到abs函数居然还有上下限问题，值得记录。以后使用math模块都要注意输入值的上下限。<br><em>记录解题代码，学习心得体会。可能不是最高效的，但是是自己写出来的</em><br><a id="more"></a></p>
 <h2 id="题目背景"><a href="#题目背景" class="headerlink" title="题目背景"></a>题目背景</h2><p>给你一个 32 位的有符号整数 x ，返回将 x 中的数字部分反转后的结果。</p>
 <p>如果反转后整数超过 32 位的有符号整数的范围 [−231,  231 − 1] ，就返回 0。</p>
 <p>假设环境不允许存储 64 位整数（有符号或无符号）。</p>
