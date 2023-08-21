@@ -20,20 +20,18 @@
     var CONFIG = {"hostname":"yoursite.name","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="bulk是批量操作的常用API。本文主要记录使用过的，csv文件上传index的操作过程。">
-<meta name="keywords" content="cs,数据库,ELK,Elasticsearch,数据组织与分析,python">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Elasticsearch学习系列[2]-bulk">
-<meta property="og:url" content="http://yoursite.name/2022/08/29/Elasticsearch学习系列-2-bulk/index.html">
+  <meta name="description" content="我们穿越长城">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Sid Wu的小站">
+<meta property="og:url" content="http://yoursite.name/archives/2023/08/index.html">
 <meta property="og:site_name" content="Sid Wu的小站">
-<meta property="og:description" content="bulk是批量操作的常用API。本文主要记录使用过的，csv文件上传index的操作过程。">
+<meta property="og:description" content="我们穿越长城">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2022-08-29T15:50:52.017Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Elasticsearch学习系列[2]-bulk">
-<meta name="twitter:description" content="bulk是批量操作的常用API。本文主要记录使用过的，csv文件上传index的操作过程。">
+<meta name="twitter:title" content="Sid Wu的小站">
+<meta name="twitter:description" content="我们穿越长城">
 
-<link rel="canonical" href="http://yoursite.name/2022/08/29/Elasticsearch学习系列-2-bulk/">
+<link rel="canonical" href="http://yoursite.name/archives/2023/08/">
 
 
 <script id="page-configurations">
@@ -41,12 +39,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : true,
+    isPost : false,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>Elasticsearch学习系列[2]-bulk | Sid Wu的小站</title>
+  <title>归档 | Sid Wu的小站</title>
   
 
 
@@ -147,112 +145,51 @@
         <div class="content-wrap">
           
 
-          <div class="content post posts-expand">
+          <div class="content archive">
             
 
-    
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.name/2022/08/29/Elasticsearch学习系列-2-bulk/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Sid Wu">
-      <meta itemprop="description" content="我们穿越长城">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Sid Wu的小站">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          Elasticsearch学习系列[2]-bulk
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-08-29 22:51:13 / 修改时间：23:50:52" itemprop="dateCreated datePublished" datetime="2022-08-29T22:51:13+08:00">2022-08-29</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        
+        <span class="collection-header">还行! 目前共计 33 篇日志。 继续努力。</span>
+      </div>
 
       
-        <p>bulk是批量操作的常用API。本文主要记录使用过的，csv文件上传index的操作过程。<br><a id="more"></a></p>
-<h2 id="4-使用bulk-api导入json数据"><a href="#4-使用bulk-api导入json数据" class="headerlink" title="4 使用bulk api导入json数据"></a>4 使用bulk api导入json数据</h2><ol>
-<li>导入文本（kibana下）</li>
-</ol>
-<p><code>POST /_bulk  
-{&quot;index&quot;:{&quot;_index&quot;:&quot;mystore_sample&quot;,&quot;_id&quot;:&quot;1&quot;}}  
-{&quot;productName&quot;:&quot;Latest art shirts for women in 2017 autumn&quot;,&quot;size&quot;:&quot;L&quot;}</code></p>
-<ol start="2">
-<li>导入文件（以下方法使用postman。curl对https的支持十分费劲，记录2里面可以看到一个GET请求就是如此费劲）</li>
-</ol>
-<ul>
-<li>新建request，协议选POST，URL填写<a href="https://localhost:9200/{index_name}/_bulk" target="_blank" rel="noopener">https://localhost:9200/{index_name}/_bulk</a></li>
-<li>authorization选择BasicAuth，输入登录Kibana的用户名称和密码</li>
-<li>body类型选择binary，然后选择要上传的json文件。文件中，每一条记录严格按以下的要求：</li>
-</ul>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"index"</span>:&#123;<span class="attr">"_index"</span>:<span class="string">"mystoreindex_sample"</span>,<span class="attr">"_id"</span>:<span class="string">"2"</span>&#125;&#125;</span><br><span class="line">&#123;<span class="attr">"field1"</span>:<span class="string">"value1"</span>,<span class="attr">"field2"</span>:<span class="string">"value1"</span>&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>​注意</strong></p>
-<ul>
-<li>index后面填写index名称，必须已经提前建好</li>
-<li>index、id前面都有底横线 [_]</li>
-<li>文件末尾有空行</li>
-</ul>
-<ol start="3">
-<li>数据源如果没有严格按如上格式，可以使用python脚本进行处理:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">json_obj = demjson.decode(dataline)</span><br><span class="line">tmp_base_key_list = list(json_obj.keys())</span><br><span class="line">tmp_source_json_obj = json_obj[<span class="string">"_source"</span>]</span><br><span class="line">tmp_source_key_list = list(tmp_source_json_obj.keys())</span><br></pre></td></tr></table></figure></li>
-</ol>
-
+    <div class="collection-year">
+      <span class="collection-header">2023</span>
     </div>
 
-    
-    
-    
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
 
-      <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/cs/" rel="tag"># cs</a>
-              <a href="/tags/数据库/" rel="tag"># 数据库</a>
-              <a href="/tags/ELK/" rel="tag"># ELK</a>
-              <a href="/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
-              <a href="/tags/数据组织与分析/" rel="tag"># 数据组织与分析</a>
-              <a href="/tags/python/" rel="tag"># python</a>
-          </div>
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2023-08-21T12:21:09+08:00"
+              content="2023-08-21">
+          08-21
+        </time>
+      </div>
 
-        
+      <div class="post-title">
+          <a class="post-title-link" href="/2023/08/21/回收业务市场信息观察与收集计划/" itemprop="url">
+            <span itemprop="name">回收业务市场信息观察与收集计划</span>
+          </a>
+      </div>
 
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2022/08/29/Elasticsearch学习系列-0-说明/" rel="prev" title="Elasticsearch学习系列[0]-说明">
-      <i class="fa fa-chevron-left"></i> Elasticsearch学习系列[0]-说明
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/08/29/Elasticsearch学习系列-3-检索/" rel="next" title="Elasticsearch学习系列[3]-检索">
-      Elasticsearch学习系列[3]-检索 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
+    </header>
   </article>
+
+
+    </div>
+  </div>
   
   
+  
+
   
 
 
@@ -305,7 +242,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-使用bulk-api导入json数据"><span class="nav-text">4 使用bulk api导入json数据</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

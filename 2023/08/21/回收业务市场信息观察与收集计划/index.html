@@ -20,20 +20,20 @@
     var CONFIG = {"hostname":"yoursite.name","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="bulk是批量操作的常用API。本文主要记录使用过的，csv文件上传index的操作过程。">
-<meta name="keywords" content="cs,数据库,ELK,Elasticsearch,数据组织与分析,python">
+  <meta name="description" content="介绍了回收业务市场信息观察与收集计划整个项目的思路、使用技术工具。发布地址为:各主要金属回收价格参考看板：http://101.42.167.21:5000/-dfc201d76126主要用于研究每周市场信息，为分析市场行情提供参考">
+<meta name="keywords" content="数据库,ELK,数据组织与分析,Python,Elasticsearc">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Elasticsearch学习系列[2]-bulk">
-<meta property="og:url" content="http://yoursite.name/2022/08/29/Elasticsearch学习系列-2-bulk/index.html">
+<meta property="og:title" content="回收业务市场信息观察与收集计划">
+<meta property="og:url" content="http://yoursite.name/2023/08/21/回收业务市场信息观察与收集计划/index.html">
 <meta property="og:site_name" content="Sid Wu的小站">
-<meta property="og:description" content="bulk是批量操作的常用API。本文主要记录使用过的，csv文件上传index的操作过程。">
+<meta property="og:description" content="介绍了回收业务市场信息观察与收集计划整个项目的思路、使用技术工具。发布地址为:各主要金属回收价格参考看板：http://101.42.167.21:5000/-dfc201d76126主要用于研究每周市场信息，为分析市场行情提供参考">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2022-08-29T15:50:52.017Z">
+<meta property="og:updated_time" content="2023-08-21T07:02:56.431Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Elasticsearch学习系列[2]-bulk">
-<meta name="twitter:description" content="bulk是批量操作的常用API。本文主要记录使用过的，csv文件上传index的操作过程。">
+<meta name="twitter:title" content="回收业务市场信息观察与收集计划">
+<meta name="twitter:description" content="介绍了回收业务市场信息观察与收集计划整个项目的思路、使用技术工具。发布地址为:各主要金属回收价格参考看板：http://101.42.167.21:5000/-dfc201d76126主要用于研究每周市场信息，为分析市场行情提供参考">
 
-<link rel="canonical" href="http://yoursite.name/2022/08/29/Elasticsearch学习系列-2-bulk/">
+<link rel="canonical" href="http://yoursite.name/2023/08/21/回收业务市场信息观察与收集计划/">
 
 
 <script id="page-configurations">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title>Elasticsearch学习系列[2]-bulk | Sid Wu的小站</title>
+  <title>回收业务市场信息观察与收集计划 | Sid Wu的小站</title>
   
 
 
@@ -154,7 +154,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.name/2022/08/29/Elasticsearch学习系列-2-bulk/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.name/2023/08/21/回收业务市场信息观察与收集计划/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -167,7 +167,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Elasticsearch学习系列[2]-bulk
+          回收业务市场信息观察与收集计划
         </h1>
 
         <div class="post-meta">
@@ -178,7 +178,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-08-29 22:51:13 / 修改时间：23:50:52" itemprop="dateCreated datePublished" datetime="2022-08-29T22:51:13+08:00">2022-08-29</time>
+              <time title="创建时间：2023-08-21 12:21:09 / 修改时间：15:02:56" itemprop="dateCreated datePublished" datetime="2023-08-21T12:21:09+08:00">2023-08-21</time>
             </span>
 
           
@@ -192,31 +192,57 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>bulk是批量操作的常用API。本文主要记录使用过的，csv文件上传index的操作过程。<br><a id="more"></a></p>
-<h2 id="4-使用bulk-api导入json数据"><a href="#4-使用bulk-api导入json数据" class="headerlink" title="4 使用bulk api导入json数据"></a>4 使用bulk api导入json数据</h2><ol>
-<li>导入文本（kibana下）</li>
-</ol>
-<p><code>POST /_bulk  
-{&quot;index&quot;:{&quot;_index&quot;:&quot;mystore_sample&quot;,&quot;_id&quot;:&quot;1&quot;}}  
-{&quot;productName&quot;:&quot;Latest art shirts for women in 2017 autumn&quot;,&quot;size&quot;:&quot;L&quot;}</code></p>
-<ol start="2">
-<li>导入文件（以下方法使用postman。curl对https的支持十分费劲，记录2里面可以看到一个GET请求就是如此费劲）</li>
-</ol>
-<ul>
-<li>新建request，协议选POST，URL填写<a href="https://localhost:9200/{index_name}/_bulk" target="_blank" rel="noopener">https://localhost:9200/{index_name}/_bulk</a></li>
-<li>authorization选择BasicAuth，输入登录Kibana的用户名称和密码</li>
-<li>body类型选择binary，然后选择要上传的json文件。文件中，每一条记录严格按以下的要求：</li>
-</ul>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"index"</span>:&#123;<span class="attr">"_index"</span>:<span class="string">"mystoreindex_sample"</span>,<span class="attr">"_id"</span>:<span class="string">"2"</span>&#125;&#125;</span><br><span class="line">&#123;<span class="attr">"field1"</span>:<span class="string">"value1"</span>,<span class="attr">"field2"</span>:<span class="string">"value1"</span>&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>​注意</strong></p>
-<ul>
-<li>index后面填写index名称，必须已经提前建好</li>
-<li>index、id前面都有底横线 [_]</li>
-<li>文件末尾有空行</li>
-</ul>
-<ol start="3">
-<li>数据源如果没有严格按如上格式，可以使用python脚本进行处理:<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">json_obj = demjson.decode(dataline)</span><br><span class="line">tmp_base_key_list = list(json_obj.keys())</span><br><span class="line">tmp_source_json_obj = json_obj[<span class="string">"_source"</span>]</span><br><span class="line">tmp_source_key_list = list(tmp_source_json_obj.keys())</span><br></pre></td></tr></table></figure></li>
-</ol>
+        <p>介绍了回收业务市场信息观察与收集计划整个项目的思路、使用技术工具。<br>发布地址为:<br>各主要金属回收价格参考看板：<a href="http://101.42.167.21:5000/-dfc201d76126" target="_blank" rel="noopener">http://101.42.167.21:5000/-dfc201d76126</a><br>主要用于研究每周市场信息，为分析市场行情提供参考<br><a id="more"></a></p>
+<h2 id="金融数据分析"><a href="#金融数据分析" class="headerlink" title="金融数据分析"></a>金融数据分析</h2><h3 id="文章结构"><a href="#文章结构" class="headerlink" title="文章结构"></a>文章结构</h3><p><code>目标</code>节介绍整个回收业务市场信息观察与收集计划项目的短期、长期目标<br><code>技术栈说明</code>节介绍了使用到的技术，简要记录了开发计划和预计难点<br><code>回收业务概述</code>节介绍了回收业务的基本进行方式<br><code>分析步骤及指标</code>节介绍主要步骤及收集的数据指标</p>
+<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>i. 信息共享，保持对行业的敏感——对某些激增、衰退有预期<br>ii. 基于数字，对市场现状具备专业认知，对行业有整体了解<br>iii. 体现专业性，协助业务人员催单逼单<br>主要方向：研究<strong>回收行业</strong>的<strong>行业信息</strong>和<strong>竞品产品</strong></p>
+<h3 id="技术栈说明"><a href="#技术栈说明" class="headerlink" title="技术栈说明"></a>技术栈说明</h3><table>
+<thead>
+<tr>
+<th>环节</th>
+<th>使用工具</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据收集转化加载</td>
+<td>Python</td>
+<td>灵活的语言，提供各类好用的开源第三方模块</td>
+</tr>
+<tr>
+<td>—</td>
+<td>Akshare</td>
+<td>封装各类公开数据源</td>
+</tr>
+<tr>
+<td>—</td>
+<td>Pandas</td>
+<td>对获取到的数据源进行简单处理</td>
+</tr>
+<tr>
+<td>可视化</td>
+<td>pycharts</td>
+<td>python 的轻量开源可视化库。选择它主要是能对输出内容（网页）进行模板化的自定义。</td>
+</tr>
+<tr>
+<td>数据共享</td>
+<td>email</td>
+<td>适用于企业邮箱的IMAP服务器</td>
+</tr>
+</tbody>
+</table>
+<h3 id="回收业务概述"><a href="#回收业务概述" class="headerlink" title="回收业务概述"></a>回收业务概述</h3><p>一般而言，回收业务的过程是：收集 - 处理 - 储存 - 出售给需求端<br>回收商户/回收站主动收集废弃物资，或者从其他供应者手中有偿获取，经过一定处理，在合适时候，出售给需求端。以差价获取利润。<br>以废纸为例，可以从学生手中直接购买，从其他个体回收者手中直接购买，可以从垃圾堆获取，然后处理（比如塑料封面要去除）、分类（按品质重量扎捆等），最后按照造纸厂要求，出售给造纸厂。<br>以废金属为例，从工地、厂房获取废料，如钢筋、电缆等，然后初步处理、分类，根据市场行情囤货或者继续收购，最后按照要求，作为原料出售给收购公司。</p>
+<p>矿石 / 废铁 - 钢 - 建材钢 - 房产业<br>工业物资与金属：<br>金银贵金属<br>钯铂贵金属<br>铁矿石、铜矿<br>铅铝<br>礼品/奢侈品：<br>各类珠宝商投入指数<br>设备回收</p>
+<h3 id="分析步骤及指标"><a href="#分析步骤及指标" class="headerlink" title="分析步骤及指标"></a>分析步骤及指标</h3><h4 id="基本思路"><a href="#基本思路" class="headerlink" title="基本思路"></a>基本思路</h4><p>PEST 分析<br>政治（Political）、经济（Economic）、社会（Social）和技术（Technological）</p>
+<h4 id="政治-政策"><a href="#政治-政策" class="headerlink" title="政治/政策"></a>政治/政策</h4><p>新闻关键词：<br>回收<br>回收网络<br>物资回收<br>资源回收<br>废旧物资<br>循环利用</p>
+<p>新闻：<br>新浪财经</p>
+<p>行业关键词：<br>回收行业<br>电池回收<br>金属回收<br>再生资源回收</p>
+<p>协会公告/研报：<br>慧博智能终端<br>小牛投研</p>
+<p>部委/协会公告：<br>国家发展改革委<br>工信化-节能和综合利用司<br>中国物资再生协会<br>生态环境部</p>
+<h4 id="经济"><a href="#经济" class="headerlink" title="经济"></a>经济</h4><p>宏观信息：<br>| 大类 | 指标 | 来源 |<br>| — | — | — |<br>| 反应整个国家的经济状况的宏观指数 | PMI GDP | AKSHARE 国家统计局 |<br>| 反应居民消费能力 | 消费信息 、物价指数 | AKSHARE 国家统计局 |</p>
+<p>行业周期</p>
+<h4 id="社会"><a href="#社会" class="headerlink" title="社会"></a>社会</h4><p>市民共识 —— 比如资源分类回收进课堂</p>
+<h4 id="技术"><a href="#技术" class="headerlink" title="技术"></a>技术</h4><p>新技术的出现根本改变了整个市场的走向。如电池容量、可维护性的进步。</p>
 
     </div>
 
@@ -226,12 +252,11 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/cs/" rel="tag"># cs</a>
               <a href="/tags/数据库/" rel="tag"># 数据库</a>
               <a href="/tags/ELK/" rel="tag"># ELK</a>
-              <a href="/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
               <a href="/tags/数据组织与分析/" rel="tag"># 数据组织与分析</a>
-              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Elasticsearc/" rel="tag"># Elasticsearc</a>
           </div>
 
         
@@ -240,13 +265,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/08/29/Elasticsearch学习系列-0-说明/" rel="prev" title="Elasticsearch学习系列[0]-说明">
-      <i class="fa fa-chevron-left"></i> Elasticsearch学习系列[0]-说明
+    <a href="/2022/08/30/leetcode系列解题-14最长公共前缀/" rel="prev" title="leetcode系列解题-14最长公共前缀">
+      <i class="fa fa-chevron-left"></i> leetcode系列解题-14最长公共前缀
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/08/29/Elasticsearch学习系列-3-检索/" rel="next" title="Elasticsearch学习系列[3]-检索">
-      Elasticsearch学习系列[3]-检索 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -305,7 +327,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-使用bulk-api导入json数据"><span class="nav-text">4 使用bulk api导入json数据</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#金融数据分析"><span class="nav-text">金融数据分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文章结构"><span class="nav-text">文章结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目标"><span class="nav-text">目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#技术栈说明"><span class="nav-text">技术栈说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回收业务概述"><span class="nav-text">回收业务概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析步骤及指标"><span class="nav-text">分析步骤及指标</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本思路"><span class="nav-text">基本思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#政治-政策"><span class="nav-text">政治/政策</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#经济"><span class="nav-text">经济</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#社会"><span class="nav-text">社会</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#技术"><span class="nav-text">技术</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
